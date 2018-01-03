@@ -4,15 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.github.daddytrap.adream.StartupActivity">
+    tools:context="io.github.daddytrap.adream.activities.StartupActivity"
+    android:background="@drawable/startup_background">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/activity_startup_public_date"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="十二月二八"
+        android:ems="1"
+        android:layout_marginRight="38dp"
+        android:layout_marginTop="58dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_startup_tradition_date"
+        app:layout_constraintRight_toLeftOf="@id/activity_startup_public_date"
+        app:layout_constraintBottom_toBottomOf="@id/activity_startup_public_date"
+        android:ems="1"
+        android:text="十一月初九"/>
 
 </android.support.constraint.ConstraintLayout>
