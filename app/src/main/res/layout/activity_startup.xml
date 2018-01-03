@@ -15,6 +15,8 @@
         app:layout_constraintRight_toRightOf="parent"
         android:text="十二月二八"
         android:ems="1"
+        android:textColor="#000"
+        android:textSize="40sp"
         android:layout_marginRight="38dp"
         android:layout_marginTop="58dp"/>
 
@@ -25,6 +27,10 @@
         app:layout_constraintRight_toLeftOf="@id/activity_startup_public_date"
         app:layout_constraintBottom_toBottomOf="@id/activity_startup_public_date"
         android:ems="1"
+        android:textColor="#000"
+        android:textSize="20sp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
         android:text="十一月初九"/>
 
 </android.support.constraint.ConstraintLayout>

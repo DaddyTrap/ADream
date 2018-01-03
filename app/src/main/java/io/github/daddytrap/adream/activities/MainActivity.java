@@ -69,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
     private static final float MIN_SWIPE_DISTANCE = 400;
 
     @Override
+    public void onBackPressed() {
+        if (currentViewState == ViewState.Detail) {
+            changeViewState(ViewState.Main);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         int action = MotionEventCompat.getActionMasked(event);
         switch (action) {
@@ -81,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
                 touchY2 = event.getY();
                 if (touchY1 - touchY2 > MIN_SWIPE_DISTANCE) {
                     changeViewState(ViewState.Detail);
-                } else if (touchY2 - touchY1 > MIN_SWIPE_DISTANCE) {
+                } /*else if (touchY2 - touchY1 > MIN_SWIPE_DISTANCE) {
                     changeViewState(ViewState.Main);
-                }
+                }*/
                 break;
             default:
         }
