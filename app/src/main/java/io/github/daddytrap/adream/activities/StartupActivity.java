@@ -2,6 +2,7 @@ package io.github.daddytrap.adream.activities;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Debug;
@@ -20,6 +21,8 @@ import org.w3c.dom.Text;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.github.daddytrap.adream.ADApplication;
 import io.github.daddytrap.adream.R;
@@ -43,6 +46,16 @@ public class StartupActivity extends AppCompatActivity {
 
         publicDateView.setTypeface(app.KAI_TI_FONT);
         traditionDateView.setTypeface(app.KAI_TI_FONT);
+
+        // After 2 secs, jump to MainActivity
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(StartupActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        }, 2000);
     }
 
     @Override

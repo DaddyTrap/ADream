@@ -3,4 +3,7 @@
     <string name="permission_warn_message">拒绝某些权限可能会使app工作不正常，可以再向您申请一下权限吗？</string>
     <string name="alertdialog_yes">好的</string>
     <string name="alertdialog_no">不了</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
