@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#6F000000">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_yaoqian_hint0"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/view_yaoqian_qian"
+        android:layout_marginBottom="10dp"
+        style="@style/YaoQianText"
+        android:text="@string/yaoqian_hint0"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_yaoqian_qian"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/qian_bunch"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_yaoqian_hint1"
+        android:layout_below="@id/view_yaoqian_qian"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        style="@style/YaoQianText"
+        android:text="@string/yaoqian_hint1"/>
+</RelativeLayout>

@@ -1,5 +1,13 @@
 package io.github.daddytrap.adream.activity;
 
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -15,6 +23,7 @@ import android.view.ViewGroup;
 
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,7 +36,7 @@ import io.github.daddytrap.adream.R;
 import io.github.daddytrap.adream.adapter.DemoPagerAdapter;
 import io.github.daddytrap.adream.fragment.DemoFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -54,11 +63,25 @@ public class MainActivity extends AppCompatActivity {
     private ImageView selectLine;
     private ImageView titleImage;
 
+    private View yaoqianLayout;
+    private TextView yaoqianHint0;
+    private TextView yaoqianHint1;
+    private ImageView yaoqianQianImage;
+
     private ADApplication app;
+
+    private SensorManager sensorManager;
+    private Sensor accSensor;
+    private MediaPlayer mediaPlayer;
+    private Handler handler;
+
+    public static final int YAOQIAN_FINISH = 100;
 
     public enum ViewState {
         Main,
-        Detail
+        Detail,
+        Yaoqian,
+        YaoqianFinish
     };
 
     ViewState currentViewState = ViewState.Main;
@@ -66,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
     float touchY1 = 0;
     float touchY2 = 0;
     private static final float MIN_SWIPE_DISTANCE = 400;
+
+
+    // region Swipe and Back
 
     @Override
     public void onBackPressed() {
@@ -76,8 +102,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    void onChangePage(int position) {
+        DemoFragment curFragment = (DemoFragment) mSectionsPagerAdapter.getItem(position);
+
+        if (currentViewState == ViewState.Main) {
+            curFragment.fragView.setVisibility(View.INVISIBLE);
+            toolbarTitleText.setText("");
+        } else if (currentViewState == ViewState.Detail) {
+            curFragment.fragView.setVisibility(View.VISIBLE);
+            toolbarTitleText.setText(IndexToSectionName.get(position));
+        }
+
+        Animation animation = new AlphaAnimation(0, 1);
+        animation.setDuration(300);
+        titleImage.setImageResource(IndexToTitleImageResID.get(position));
+        titleImage.startAnimation(animation);
+    }
+
+    public class SectionTransformer implements ViewPager.PageTransformer {
+        @Override
+        public void transformPage(View page, float position) {
+            int this_page_num = (int)page.getTag();
+            float translation = 0;
+            translation = (this_page_num - position) * 280;
+            selectLine.setTranslationX(translation);
+        }
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+        if (currentViewState != ViewState.Main) return super.dispatchTouchEvent(event);
         int action = MotionEventCompat.getActionMasked(event);
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -98,47 +152,114 @@ public class MainActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(event);
     }
 
+    // endregion
+
     void changeViewState(ViewState state) {
         if (state == currentViewState) return;
         Log.i("INFO", "Change state to " + state.name());
+
+        Animation animation;
+
+        ViewState lastState = currentViewState;
+
         currentViewState = state;
         int curIndex = mViewPager.getCurrentItem();
         DemoFragment curFragment = (DemoFragment) mSectionsPagerAdapter.getItem(curIndex);
         Log.i("INFO", "Cur index: " + curIndex);
-        if (currentViewState == ViewState.Main) {
-            Animation animation = new TranslateAnimation(0, 0, 0, curFragment.fragView.getHeight());
-            animation.setDuration(300);
-            curFragment.fragView.startAnimation(animation);
-            curFragment.fragView.setVisibility(View.INVISIBLE);
-            toolbarTitleText.startAnimation(animation);
-            toolbarTitleText.setText("");
-        } else {
-            Animation animation = new TranslateAnimation(0, 0, curFragment.fragView.getHeight(), 0);
-            animation.setDuration(300);
-            curFragment.fragView.startAnimation(animation);
-            curFragment.fragView.setVisibility(View.VISIBLE);
-            toolbarTitleText.startAnimation(animation);
-            toolbarTitleText.setText(IndexToSectionName.get(curIndex));
+
+        switch (currentViewState) {
+            case Main:
+                if (lastState == ViewState.Detail) {
+                    Log.i("INFO", "Hide detail");
+                    animation = new TranslateAnimation(0, 0, 0, curFragment.fragView.getHeight());
+                    animation.setDuration(300);
+                    curFragment.fragView.startAnimation(animation);
+                    curFragment.fragView.setVisibility(View.INVISIBLE);
+                    toolbarTitleText.startAnimation(animation);
+                } else if (lastState == ViewState.YaoqianFinish) {
+                    Log.i("INFO", "Hide yaoqian");
+                    yaoqianLayout.setVisibility(View.INVISIBLE);
+                }
+                toolbarTitleText.setText("");
+                break;
+            case Detail:
+                animation = new TranslateAnimation(0, 0, curFragment.fragView.getHeight(), 0);
+                animation.setDuration(300);
+                curFragment.fragView.startAnimation(animation);
+                curFragment.fragView.setVisibility(View.VISIBLE);
+                toolbarTitleText.startAnimation(animation);
+                toolbarTitleText.setText(IndexToSectionName.get(curIndex));
+                break;
+            case Yaoqian:
+                animation = new ScaleAnimation(0.5f, 1.0f, 0.5f, 1.0f);
+                animation.setDuration(300);
+                yaoqianLayout.startAnimation(animation);
+                yaoqianLayout.setVisibility(View.VISIBLE);
+                break;
+            case YaoqianFinish:
+                animation = new ScaleAnimation(0, 1, 0, 1);
+                animation.setDuration(300);
+                yaoqianQianImage.setImageResource(R.mipmap.qian_one);
+                yaoqianQianImage.startAnimation(animation);
         }
         titleImage.setImageResource(IndexToTitleImageResID.get(curIndex));
     }
 
-    void onChangePage(int position) {
-        DemoFragment curFragment = (DemoFragment) mSectionsPagerAdapter.getItem(position);
-
-        if (currentViewState == ViewState.Main) {
-            curFragment.fragView.setVisibility(View.INVISIBLE);
-            toolbarTitleText.setText("");
-        } else if (currentViewState == ViewState.Detail) {
-            curFragment.fragView.setVisibility(View.VISIBLE);
-            toolbarTitleText.setText(IndexToSectionName.get(position));
+    @Override
+    protected void onStart() {
+        super.onStart();
+        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        if (sensorManager != null) {
+            accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (accSensor != null) {
+                sensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_UI);
+            }
         }
-
-        Animation animation = new AlphaAnimation(0, 1);
-        animation.setDuration(300);
-        titleImage.setImageResource(IndexToTitleImageResID.get(position));
-        titleImage.startAnimation(animation);
     }
+
+    @Override
+    protected void onPause() {
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(this);
+        }
+        super.onPause();
+    }
+
+    private static final float MIN_SHAKE_ACC = 15f;
+    private boolean shaking = false;
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        int type = event.sensor.getType();
+
+        if (type == Sensor.TYPE_ACCELEROMETER) {
+            if (currentViewState != ViewState.Yaoqian) return;
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            if (!shaking && Math.abs(x) > MIN_SHAKE_ACC || Math.abs(y) > MIN_SHAKE_ACC || Math.abs(z) > MIN_SHAKE_ACC) {
+                mediaPlayer.start();
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        try {
+                            sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        handler.obtainMessage(YAOQIAN_FINISH).sendToTarget();
+                        shaking = false;
+                    }
+                };
+                thread.start();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
     void setViews() {
         IndexToSectionName.put(0, "诗词");
@@ -182,6 +303,32 @@ public class MainActivity extends AppCompatActivity {
 
         selectLine = (ImageView)findViewById(R.id.activity_main_select_line);
         titleImage = (ImageView)findViewById(R.id.activity_main_title_image);
+
+        yaoqianLayout = findViewById(R.id.activity_main_yaoqian);
+        yaoqianHint0 = (TextView)findViewById(R.id.view_yaoqian_hint0);
+        yaoqianHint1 = (TextView)findViewById(R.id.view_yaoqian_hint1);
+        yaoqianQianImage = (ImageView)findViewById(R.id.view_yaoqian_qian);
+
+        yaoqianHint0.setTypeface(app.KAI_TI_FONT);
+        yaoqianHint1.setTypeface(app.KAI_TI_FONT);
+
+        yaoqianLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentViewState == ViewState.YaoqianFinish) {
+                    changeViewState(ViewState.Main);
+                }
+            }
+        });
+
+        boolean shouldYaoqian = true;
+        if (shouldYaoqian) {
+            changeViewState(ViewState.Yaoqian);
+        }
+    }
+
+    void showYaoqian() {
+        yaoqianLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -190,19 +337,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         app = ADApplication.getInstance();
+        mediaPlayer = MediaPlayer.create(this, R.raw.yaoqian_se);
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case YAOQIAN_FINISH:
+                        changeViewState(ViewState.YaoqianFinish);
+                        break;
+                }
+            }
+        };
 
         setViews();
-    }
-
-
-
-    public class SectionTransformer implements ViewPager.PageTransformer {
-        @Override
-        public void transformPage(View page, float position) {
-            int this_page_num = (int)page.getTag();
-            float translation = 0;
-            translation = (this_page_num - position) * 280;
-            selectLine.setTranslationX(translation);
-        }
     }
 }

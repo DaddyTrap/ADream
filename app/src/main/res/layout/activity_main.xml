@@ -122,4 +122,9 @@
             android:layout_gravity="right"
             android:layout_marginRight="12dp"/>
     </android.support.v7.widget.Toolbar>
+
+    <include
+        layout="@layout/view_yaoqian"
+        android:visibility="invisible"
+        android:id="@+id/activity_main_yaoqian"/>
 </android.support.constraint.ConstraintLayout>
