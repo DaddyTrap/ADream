@@ -13,13 +13,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.xhinliang.lunarcalendar.LunarCalendar;
+
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import io.github.daddytrap.adream.ADApplication;
 import io.github.daddytrap.adream.R;
+import io.github.daddytrap.adream.util.DateUtil;
 
 public class StartupActivity extends AppCompatActivity {
 
@@ -40,6 +45,19 @@ public class StartupActivity extends AppCompatActivity {
 
         publicDateView.setTypeface(app.KAI_TI_FONT);
         traditionDateView.setTypeface(app.KAI_TI_FONT);
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int date = calendar.get(Calendar.DATE);
+        LunarCalendar lunarCalendar = LunarCalendar.obtainCalendar(year, month, date);
+
+        String lunarMonth = lunarCalendar.getLunarMonth();
+        String lunarDate = lunarCalendar.getLunarDay();
+
+        traditionDateView.setText(lunarMonth + lunarDate);
+
+        publicDateView.setText(DateUtil.IntToMonth[month] + DateUtil.IntToDate[date]);
 
         // After 2 secs, jump to MainActivity
         Timer timer = new Timer();

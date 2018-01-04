@@ -5,5 +5,102 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="io.github.daddytrap.adream.activity.MusicActivity">
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@mipmap/music_background_0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:scaleType="centerCrop"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_music_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_music_toolbar"
+        style="@style/MusicTitleText"
+        android:text="故梦"/>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:id="@+id/activity_music_lyric_wrapper"
+        app:layout_constraintTop_toBottomOf="@+id/activity_music_title"
+        app:layout_constraintLeft_toLeftOf="@+id/activity_music_left_guideline"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_music_lyric"
+            style="@style/MusicLyricText"
+            android:maxLines="500"
+            android:scrollbars="vertical"
+            android:text="测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n测试\n最后一行"/>
+    </ScrollView>
+
+    <SeekBar
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_music_seekbar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_music_lyric_wrapper"
+        android:layout_marginTop="20dp"
+        android:thumb="@drawable/seekbar_thumb"
+        android:progressDrawable="@drawable/seekbar_progress" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_music_seekbar">
+        <ImageView
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:id="@+id/activity_music_location_icon"
+            android:src="@drawable/ic_location_on" />
+        <ImageView
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:id="@+id/activity_music_play_icon"
+            android:src="@drawable/ic_play_arrow"
+            android:layout_marginLeft="60dp"/>
+        <ImageView
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:id="@+id/activity_music_next_icon"
+            android:src="@drawable/ic_fast_forward"
+            android:layout_marginLeft="60dp"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/activity_music_toolbar"
+        android:background="#00FFFFFF">
+        <ImageView
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:src="@drawable/ic_keyboard_arrow_left"/>
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_music_left_guideline"
+        app:layout_constraintGuide_begin="80dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="80dp" />
 </android.support.constraint.ConstraintLayout>
