@@ -20,6 +20,16 @@
         <item name="android:textSize">44sp</item>
     </style>
 
+    <style name="MusicTitleText" parent="BlackText">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MusicLyricText">
+        <item name="android:color">#1f1f1f</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="YaoQianText">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">20sp</item>
