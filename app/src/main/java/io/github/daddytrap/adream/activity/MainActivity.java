@@ -1,5 +1,6 @@
 package io.github.daddytrap.adream.activity;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Map<Integer, Integer> IndexToTitleImageResID = new HashMap<>();
 
     private TextView toolbarTitleText;
+    private ImageView toolbarWuImage;
+    private ImageView toolbarPipaImage;
+
     private TextView shiciText;
     private TextView jiuwuText;
     private TextView miaobiText;
@@ -225,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onPause();
     }
 
-    private static final float MIN_SHAKE_ACC = 15f;
+    private static final float MIN_SHAKE_ACC = 20f;
     private boolean shaking = false;
 
     @Override
@@ -292,6 +296,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
         toolbarTitleText = (TextView)findViewById(R.id.activity_main_toolbar_title);
+        toolbarWuImage = (ImageView)findViewById(R.id.activity_main_wu_icon);
+        toolbarPipaImage = (ImageView)findViewById(R.id.activity_main_pipa_icon);
+
         shiciText = (TextView)findViewById(R.id.activity_main_shici_text);
         jiuwuText = (TextView)findViewById(R.id.activity_main_jiuwu_text);
         miaobiText = (TextView)findViewById(R.id.activity_main_miaobi_text);
@@ -321,14 +328,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+
+        toolbarPipaImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MusicActivity.class);
+                startActivity(intent);
+            }
+        });
+
         boolean shouldYaoqian = true;
         if (shouldYaoqian) {
             changeViewState(ViewState.Yaoqian);
         }
-    }
-
-    void showYaoqian() {
-        yaoqianLayout.setVisibility(View.VISIBLE);
     }
 
     @Override

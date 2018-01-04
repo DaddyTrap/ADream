@@ -104,7 +104,7 @@
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:id="@+id/activity_main_me_icon"
+            android:id="@+id/activity_main_wu_icon"
             android:src="@mipmap/wu_icon"/>
         <TextView
             android:layout_width="wrap_content"
