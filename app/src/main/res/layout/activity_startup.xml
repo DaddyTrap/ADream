@@ -22,7 +22,7 @@
         android:id="@+id/activity_startup_public_date"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="十二月二八"
+        android:text=""
         android:ems="1"
         android:textColor="#000"
         android:textSize="40sp"
@@ -40,6 +40,6 @@
         android:textSize="20sp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp"
-        android:text="十一月初九"/>
+        android:text=""/>
 
 </android.support.constraint.ConstraintLayout>
