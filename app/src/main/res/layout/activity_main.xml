@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="io.github.daddytrap.adream.activities.MainActivity"
+    tools:context="io.github.daddytrap.adream.activity.MainActivity"
     android:background="#F5F1F2">
 
     <RelativeLayout
@@ -22,7 +22,7 @@
             android:layout_height="200dp"
             android:id="@+id/activity_main_title_image"
             android:layout_marginTop="30dp"
-            android:src="@mipmap/miaobi_title_image"
+            android:src="@mipmap/shici_title_image"
             android:layout_centerHorizontal="true"/>
 
         <RelativeLayout
@@ -104,7 +104,7 @@
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:id="@+id/activity_main_me_icon"
+            android:id="@+id/activity_main_wu_icon"
             android:src="@mipmap/wu_icon"/>
         <TextView
             android:layout_width="wrap_content"
@@ -122,4 +122,9 @@
             android:layout_gravity="right"
             android:layout_marginRight="12dp"/>
     </android.support.v7.widget.Toolbar>
+
+    <include
+        layout="@layout/view_yaoqian"
+        android:visibility="invisible"
+        android:id="@+id/activity_main_yaoqian"/>
 </android.support.constraint.ConstraintLayout>

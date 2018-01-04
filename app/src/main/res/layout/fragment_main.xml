@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/toolbar_height"
-    tools:context="io.github.daddytrap.adream.activities.MainActivity$DemoFragment"
+    tools:context="io.github.daddytrap.adream.activity.MainActivity$DemoFragment"
     android:background="@mipmap/jiuwu_background">
     <TextView
         android:id="@+id/section_label"
