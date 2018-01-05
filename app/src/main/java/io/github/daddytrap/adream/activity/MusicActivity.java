@@ -37,6 +37,7 @@ public class MusicActivity extends AppCompatActivity {
     private SeekBar seekBar;
     private TextView timeText;
     private TextView maxTimeText;
+    private ImageView backIcon;
 
     private Handler handler;
     public static final int REFRESH_REQ = 110;
@@ -76,8 +77,20 @@ public class MusicActivity extends AppCompatActivity {
                         seekBar.setProgress(dataArr[0]);
 
                         SimpleDateFormat format = new SimpleDateFormat("mm:ss");
-                        String curPos = format.format(new Date(dataArr[0]));
-                        String maxPos = format.format(new Date(dataArr[1]));
+
+                        int curPosInt = dataArr[0];
+                        int maxPosInt = dataArr[1];
+
+                        String curPos;
+                        String maxPos;
+                        if (curPosInt == -1 || maxPosInt == -1) {
+                            curPos = "正在加载...";
+                            maxPos = "稍安勿躁";
+                        } else {
+                            curPos = format.format(new Date(curPosInt));
+                            maxPos = format.format(new Date(maxPosInt));
+                        }
+
                         timeText.setText(curPos);
                         maxTimeText.setText(maxPos);
 
@@ -96,14 +109,24 @@ public class MusicActivity extends AppCompatActivity {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mBinder = service;
-                // TODO: 随机歌曲
+                Parcel data = Parcel.obtain();
+                Parcel reply = Parcel.obtain();
+                try {
+                    mBinder.transact(MusicService.REFRESH_REQ, data, reply, 0);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                int[] rep = new int[3];
+                reply.readIntArray(rep);
+                // TODO: 随机歌曲、更换名字/歌词
+                // A Thread is needed, otherwise it will stuck the UI
                 Thread thread = new Thread() {
                     @Override
                     public void run() {
                         super.run();
                         String soundUrl = "http://123.207.93.25/test.mp3";
-                        String soundPath = "/ADream/music/test.mp3";
-                        setSound(soundUrl, soundPath);
+                        setSound(soundUrl, MusicService.SET_SOFT);
                     }
                 };
                 thread.start();
@@ -169,6 +192,8 @@ public class MusicActivity extends AppCompatActivity {
         nextIcon = (ImageView)findViewById(R.id.activity_music_next_icon);
         seekBar = (SeekBar)findViewById(R.id.activity_music_seekbar);
 
+        backIcon = (ImageView)findViewById(R.id.activity_music_back_icon);
+
         timeText = (TextView)findViewById(R.id.activity_music_time);
         maxTimeText = (TextView)findViewById(R.id.activity_music_max_time);
 
@@ -205,12 +230,19 @@ public class MusicActivity extends AppCompatActivity {
                 }
             }
         });
+
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicActivity.this.finish();
+            }
+        });
     }
 
-    void setSound(String soundUrl, String soundPath) {
+    void setSound(String soundUrl, String mode) {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
-        data.writeStringArray(new String[] {soundUrl, soundPath});
+        data.writeStringArray(new String[] {soundUrl, mode});
         try {
             mBinder.transact(MusicService.SET_REQ, data, reply, 0);
         } catch (RemoteException e) {

@@ -1,27 +1,16 @@
 package io.github.daddytrap.adream.service;
 
-import android.app.DownloadManager;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Binder;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import java.io.File;
 import java.io.IOException;
-
-import io.github.daddytrap.adream.util.ADUtil;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 /**
  * Created by DaddyTrapC on 2018/1/4.
@@ -38,13 +27,16 @@ public class MusicService extends Service {
     public static final int REFRESH_REQ = 104;
     public static final int SEEK_REQ = 105;
 
+    public static final String SET_HARD = "HARD";
+    public static final String SET_SOFT = "SOFT";
+
     public enum MusicState {
-        WaitForSet,
+        WaitToSet,
         Setting,
         Ready
     };
 
-    MusicState currentState = MusicState.WaitForSet;
+    MusicState currentState = MusicState.WaitToSet;
 
     @Nullable
     @Override
@@ -59,74 +51,30 @@ public class MusicService extends Service {
     public class MyBinder extends Binder {
         @Override
         protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-            Log.i(MusicService.class.getName(), "Dealing with code: " + code);
+//            Log.i(MusicService.class.getName(), "Dealing with code: " + code);
             switch (code) {
                 case SET_REQ:
-                    currentState = MusicState.WaitForSet;
+//                    currentState = MusicState.WaitToSet;
                     String[] args = new String[2];
                     data.readStringArray(args);
                     String sourceUrl = args[0];
-                    final String sourcePath = Environment.getExternalStorageDirectory() + args[1];
-
-                    File file = new File(sourcePath);
-                    if (file.exists()) {
-                        try {
-                            Log.i(MusicService.class.getName(), "Trying to read " + sourcePath);
-                            mediaPlayer.reset();
-                            mediaPlayer.setDataSource(sourcePath);
-                            mediaPlayer.prepare();
-                            currentState = MusicState.Ready;
-                            reply.writeInt(2);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            currentState = MusicState.WaitForSet;
-                            reply.writeInt(0);
-                        }
-                    } else {
-//                        currentState = MusicState.Setting;
-
-                        try {
-                            Log.i(MusicService.class.getName(), "Trying to read " + sourceUrl);
-                            mediaPlayer.reset();
-                            mediaPlayer.setDataSource(sourceUrl);
-                            mediaPlayer.prepare();
-                            currentState = MusicState.Ready;
-                            reply.writeInt(2);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            currentState = MusicState.WaitForSet;
-                            reply.writeInt(0);
-                        }
-
-                        reply.writeInt(1);
-                        OkHttpClient okHttpClient = new OkHttpClient();
-                        Request request = new Request.Builder().url(sourceUrl).build();
-
-                        okHttpClient.newCall(request).enqueue(new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                try (ResponseBody responseBody = response.body()) {
-                                    if (!response.isSuccessful()) {
-                                        Log.e(MusicService.class.getName(), "Download failed");
-                                        return;
-                                    }
-                                    boolean res = ADUtil.saveFile(sourcePath, responseBody.byteStream());
-                                    if (!res) {
-                                        Log.e(MusicService.class.getName(), "Downloaded but write failed");
-                                        return;
-                                    }
-//                                    mediaPlayer.reset();
-//                                    mediaPlayer.setDataSource(sourcePath);
-//                                    mediaPlayer.prepare();
-//                                    currentState = MusicState.Ready;
-                                }
-                            }
-                        });
+                    String mode = args[1];
+                    if (mode.equals(SET_SOFT) && currentState != MusicState.WaitToSet) {
+                        reply.writeInt(-1);
+                        break;
+                    }
+                    try {
+                        Log.i(MusicService.class.getName(), "Trying to read " + sourceUrl);
+                        mediaPlayer.stop();
+                        mediaPlayer.reset();
+                        mediaPlayer.setDataSource(sourceUrl);
+                        mediaPlayer.prepare();
+                        currentState = MusicState.Ready;
+                        reply.writeInt(2);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        currentState = MusicState.WaitToSet;
+                        reply.writeInt(0);
                     }
                     break;
                 case PLAY_REQ:
@@ -158,7 +106,7 @@ public class MusicService extends Service {
                     if (currentState == MusicState.Ready) {
                         reply.writeIntArray(new int[]{mediaPlayer.getCurrentPosition(), mediaPlayer.getDuration(), mediaPlayer.isPlaying() ? 1 : 0});
                     } else {
-                        reply.writeIntArray(new int[]{0, 0, 0});
+                        reply.writeIntArray(new int[]{-1, -1, 0});
                     }
                     break;
                 case SEEK_REQ:
