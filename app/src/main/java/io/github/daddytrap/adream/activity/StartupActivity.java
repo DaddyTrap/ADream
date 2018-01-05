@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,16 +16,16 @@ import android.widget.TextView;
 
 import com.xhinliang.lunarcalendar.LunarCalendar;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import io.github.daddytrap.adream.ADApplication;
 import io.github.daddytrap.adream.R;
-import io.github.daddytrap.adream.util.DateUtil;
+import io.github.daddytrap.adream.util.ADUtil;
 
 public class StartupActivity extends AppCompatActivity {
 
@@ -57,7 +58,7 @@ public class StartupActivity extends AppCompatActivity {
 
         traditionDateView.setText(lunarMonth + lunarDate);
 
-        publicDateView.setText(DateUtil.IntToMonth[month] + DateUtil.IntToDate[date]);
+        publicDateView.setText(ADUtil.IntToMonth[month] + ADUtil.IntToDate[date]);
 
         // After 2 secs, jump to MainActivity
         Timer timer = new Timer();

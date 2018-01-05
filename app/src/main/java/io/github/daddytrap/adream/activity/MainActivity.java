@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 yaoqianLayout.setVisibility(View.VISIBLE);
                 break;
             case YaoqianFinish:
+                // TODO: 随机签
                 animation = new ScaleAnimation(0, 1, 0, 1);
                 animation.setDuration(300);
                 yaoqianQianImage.setImageResource(R.mipmap.qian_one);
