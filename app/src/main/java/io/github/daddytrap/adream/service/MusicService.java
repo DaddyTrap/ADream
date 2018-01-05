@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Binder;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
@@ -28,6 +27,17 @@ public class MusicService extends Service {
     public static final int REFRESH_REQ = 104;
     public static final int SEEK_REQ = 105;
 
+    public static final String SET_HARD = "HARD";
+    public static final String SET_SOFT = "SOFT";
+
+    public enum MusicState {
+        WaitToSet,
+        Setting,
+        Ready
+    };
+
+    MusicState currentState = MusicState.WaitToSet;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -41,25 +51,41 @@ public class MusicService extends Service {
     public class MyBinder extends Binder {
         @Override
         protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+//            Log.i(MusicService.class.getName(), "Dealing with code: " + code);
             switch (code) {
                 case SET_REQ:
-                    String sourcePath = Environment.getExternalStorageDirectory() + data.readString();
+//                    currentState = MusicState.WaitToSet;
+                    String[] args = new String[2];
+                    data.readStringArray(args);
+                    String sourceUrl = args[0];
+                    String mode = args[1];
+                    if (mode.equals(SET_SOFT) && currentState != MusicState.WaitToSet) {
+                        reply.writeInt(-1);
+                        break;
+                    }
                     try {
-                        mediaPlayer.setDataSource(sourcePath);
+                        Log.i(MusicService.class.getName(), "Trying to read " + sourceUrl);
+                        mediaPlayer.stop();
+                        mediaPlayer.reset();
+                        mediaPlayer.setDataSource(sourceUrl);
                         mediaPlayer.prepare();
-                        reply.writeBooleanArray(new boolean[]{true});
+                        currentState = MusicState.Ready;
+                        reply.writeInt(2);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        reply.writeBooleanArray(new boolean[]{false});
+                        currentState = MusicState.WaitToSet;
+                        reply.writeInt(0);
                     }
                     break;
                 case PLAY_REQ:
                     // Play Button
+                    if (currentState != MusicState.Ready) break;
                     if (mediaPlayer.isPlaying()) mediaPlayer.pause();
                     else mediaPlayer.start();
                     break;
                 case STOP_REQ:
                     // Stop Button
+                    if (currentState != MusicState.Ready) break;
                     if (mediaPlayer != null) {
                         mediaPlayer.stop();
                         try {
@@ -73,13 +99,19 @@ public class MusicService extends Service {
                 case QUIT_REQ:
                     // Quit Button
                     mediaPlayer.release();
+                    stopSelf();
                     break;
                 case REFRESH_REQ:
                     // Refresh Button
-                    reply.writeIntArray(new int[] {mediaPlayer.getCurrentPosition(), mediaPlayer.getDuration(), mediaPlayer.isPlaying() ? 1 : 0});
+                    if (currentState == MusicState.Ready) {
+                        reply.writeIntArray(new int[]{mediaPlayer.getCurrentPosition(), mediaPlayer.getDuration(), mediaPlayer.isPlaying() ? 1 : 0});
+                    } else {
+                        reply.writeIntArray(new int[]{-1, -1, 0});
+                    }
                     break;
                 case SEEK_REQ:
                     // Seekbar Action
+                    if (currentState != MusicState.Ready) break;
                     int pos = data.readInt();
                     mediaPlayer.seekTo(pos);
                     break;
