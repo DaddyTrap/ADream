@@ -18,15 +18,19 @@ import io.github.daddytrap.adream.fragment.DemoFragment;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class DemoPagerAdapter extends FragmentPagerAdapter {
+public class CommonPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragments;
+    private List<String> fragmentTitles;
 
-    public DemoPagerAdapter(FragmentManager fm) {
+    public CommonPagerAdapter(FragmentManager fm) {
         super(fm);
         fragments = new LinkedList<>();
-        for (int i = 0; i < 3; ++i) {
-            fragments.add(DemoFragment.newInstance(i + 1));
-        }
+        fragmentTitles = new LinkedList<>();
+    }
+
+    public void addFragment(Fragment fragment, String name) {
+        fragments.add(fragment);
+        fragmentTitles.add(name);
     }
 
     @Override
@@ -44,14 +48,6 @@ public class DemoPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "SECTION 1";
-            case 1:
-                return "SECTION 2";
-            case 2:
-                return "SECTION 3";
-        }
-        return null;
+        return fragmentTitles.get(position);
     }
 }

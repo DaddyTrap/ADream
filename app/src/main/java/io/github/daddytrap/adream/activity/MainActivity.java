@@ -8,19 +8,15 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -34,8 +30,12 @@ import java.util.Map;
 
 import io.github.daddytrap.adream.ADApplication;
 import io.github.daddytrap.adream.R;
-import io.github.daddytrap.adream.adapter.DemoPagerAdapter;
+import io.github.daddytrap.adream.adapter.CommonPagerAdapter;
+import io.github.daddytrap.adream.fragment.ADFragment;
 import io.github.daddytrap.adream.fragment.DemoFragment;
+import io.github.daddytrap.adream.fragment.JiuwuFragment;
+import io.github.daddytrap.adream.fragment.MiaobiFragment;
+import io.github.daddytrap.adream.fragment.ShiciFragment;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private DemoPagerAdapter mSectionsPagerAdapter;
+    private CommonPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView miaobiText;
     private ImageView selectLine;
     private ImageView titleImage;
+    private ImageView upIcon;
 
     private View yaoqianLayout;
     private TextView yaoqianHint0;
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     void onChangePage(int position) {
-        DemoFragment curFragment = (DemoFragment) mSectionsPagerAdapter.getItem(position);
+        ADFragment curFragment = (ADFragment) mSectionsPagerAdapter.getItem(position);
 
         if (currentViewState == ViewState.Main) {
             curFragment.fragView.setVisibility(View.INVISIBLE);
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         currentViewState = state;
         int curIndex = mViewPager.getCurrentItem();
-        DemoFragment curFragment = (DemoFragment) mSectionsPagerAdapter.getItem(curIndex);
+        ADFragment curFragment = (ADFragment) mSectionsPagerAdapter.getItem(curIndex);
         Log.i("INFO", "Cur index: " + curIndex);
 
         switch (currentViewState) {
@@ -276,7 +277,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new DemoPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new CommonPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter.addFragment(ShiciFragment.newInstance(), "诗词");
+        mSectionsPagerAdapter.addFragment(JiuwuFragment.newInstance(), "旧物");
+        mSectionsPagerAdapter.addFragment(MiaobiFragment.newInstance(), "妙笔");
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -299,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         toolbarTitleText = (TextView)findViewById(R.id.activity_main_toolbar_title);
         toolbarWuImage = (ImageView)findViewById(R.id.activity_main_wu_icon);
         toolbarPipaImage = (ImageView)findViewById(R.id.activity_main_pipa_icon);
+        upIcon = (ImageView)findViewById(R.id.activity_main_up_icon);
 
         shiciText = (TextView)findViewById(R.id.activity_main_shici_text);
         jiuwuText = (TextView)findViewById(R.id.activity_main_jiuwu_text);
@@ -337,6 +342,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 startActivity(intent);
             }
         });
+
+        Animation blinkAnimation = new AlphaAnimation(0.2f, 1f);
+        blinkAnimation.setDuration(1500);
+        blinkAnimation.setRepeatMode(Animation.REVERSE);
+        blinkAnimation.setRepeatCount(Animation.INFINITE);
+        upIcon.startAnimation(blinkAnimation);
 
         boolean shouldYaoqian = true;
         if (shouldYaoqian) {

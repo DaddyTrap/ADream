@@ -75,7 +75,8 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_keyboard_arrow_down"
+            android:id="@+id/activity_main_up_icon"
+            android:src="@drawable/ic_keyboard_arrow_up"
             android:layout_below="@id/activity_main_vase_image"
             android:layout_centerHorizontal="true"/>
     </RelativeLayout>

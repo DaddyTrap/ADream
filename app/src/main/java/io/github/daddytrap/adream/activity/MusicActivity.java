@@ -125,7 +125,7 @@ public class MusicActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         super.run();
-                        String soundUrl = "http://123.207.93.25/test.mp3";
+                        String soundUrl = "http://123.207.93.25/歌曲1故梦.mp3";
                         setSound(soundUrl, MusicService.SET_SOFT);
                     }
                 };
