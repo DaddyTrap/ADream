@@ -8,7 +8,9 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.FragmentPagerAdapter;
@@ -72,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView yaoqianHint0;
     private TextView yaoqianHint1;
     private ImageView yaoqianQianImage;
+
+    private DrawerLayout drawer;
+    private ConstraintLayout drawerLayout;
 
     private ADApplication app;
 
@@ -305,6 +310,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         toolbarPipaImage = (ImageView)findViewById(R.id.activity_main_pipa_icon);
         upIcon = (ImageView)findViewById(R.id.activity_main_up_icon);
 
+        drawer = (DrawerLayout) findViewById(R.id.drawer);
+        drawerLayout = (ConstraintLayout) findViewById(R.id.drawer_layout);
+
         shiciText = (TextView)findViewById(R.id.activity_main_shici_text);
         jiuwuText = (TextView)findViewById(R.id.activity_main_jiuwu_text);
         miaobiText = (TextView)findViewById(R.id.activity_main_miaobi_text);
@@ -340,6 +348,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MusicActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        toolbarWuImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("click");
+                if (drawer.isDrawerOpen(drawerLayout)) {
+                    drawer.openDrawer(drawerLayout);
+                } else {
+                    drawer.closeDrawer(drawerLayout);
+                }
             }
         });
 
