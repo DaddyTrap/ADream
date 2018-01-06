@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:paddingTop="7dp">
+    <item android:drawable="@color/colorCalendar" android:height="2dp"/>
+    <item android:drawable="@color/colorCalendar" android:height="2dp" android:top="5dp"/>
+</layer-list>

@@ -40,6 +40,30 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
+    <style name="CalendarText">
+        <item name="android:textColor">@color/colorCalendar</item>
+    </style>
+
+    <style name="CalendarSuggestText" parent="CalendarText">
+        <item name="android:textSize">23sp</item>
+    </style>
+
+    <style name="CalendarDateText" parent="CalendarText">
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="CalendarRoundTextSize">
+        <item name="android:background">@drawable/round_backgourd</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="EditMiaobiEditText" parent="Theme.AppCompat.Light">
         <item name="colorControlNormal">#d6d6d6</item>
         <item name="colorControlActivated">#d6d6d6</item>

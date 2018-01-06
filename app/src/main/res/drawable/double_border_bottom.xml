@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:paddingBottom="7dp">
+    <item
+        android:top="-3dp"
+        android:right="-3dp"
+        android:left="-3dp">
+        <shape>
+            <stroke
+                android:width="2dp"
+                android:color="@color/colorCalendar" />
+        </shape>
+    </item>
+    <item
+        android:top="-3dp"
+        android:bottom="5dp"
+        android:right="-3dp"
+        android:left="-3dp">
+        <shape>
+            <stroke
+                android:width="2dp"
+                android:color="@color/colorCalendar" />
+        </shape>
+    </item>
+</layer-list>
