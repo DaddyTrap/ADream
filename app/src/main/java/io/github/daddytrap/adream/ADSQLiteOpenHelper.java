@@ -37,7 +37,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         String createUserTableSql = "CREATE TABLE " + USER_TABLE_NAME +
                 "(id integer primary key , " +
                 "name text , " +
-                "gift text);";
+                "avatarBase64 text);";
         db.execSQL(createUserTableSql);
 
         String createPassageTableSql = "CREATE TABLE " + PASSAGE_TABLE_NAME +
@@ -45,8 +45,9 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
                 "title text," +
                 "author text," +
                 "content text," +
-                "date text" +
-                "type text);";
+                "date text," +
+                "type text," +
+                "avatarBase64 text"+ ");";
         db.execSQL(createPassageTableSql);
 
         String createCommentTableSql = "CREATE TABLE " + COMMENT_TABLE_NAME +
@@ -124,10 +125,10 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     public List<Comment> getCommentByPassageId(int passageId) {
         List<Comment> result = new LinkedList<>();
         SQLiteDatabase db = getReadableDatabase();
-        String querySql = "SELECT Comment.id as commentid, Comment.content, Comment.date, User.id as userid, User.name FROM " + COMMENT_TABLE_NAME + ", " + USER_TABLE_NAME + " WHERE passageid = ? AND Comment.userid = User.id;";
+        String querySql = "SELECT Comment.id as commentid, Comment.content, Comment.date, User.id as userid, User.name, User.avatarBase64 FROM " + COMMENT_TABLE_NAME + ", " + USER_TABLE_NAME + " WHERE passageid = ? AND Comment.userid = User.id;";
         Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(passageId)});
         while (cursor.moveToNext()) {
-            User user = new User(cursor.getInt(cursor.getColumnIndex("userid")), cursor.getString(cursor.getColumnIndex("name")));
+            User user = new User(cursor.getInt(cursor.getColumnIndex("userid")), cursor.getString(cursor.getColumnIndex("name")), cursor.getString(cursor.getColumnIndex("avatarBase64")));
             Comment comment = new Comment(cursor.getInt(cursor.getColumnIndex("commentid")), user, cursor.getString(cursor.getColumnIndex("content")), new Date(cursor.getString(cursor.getColumnIndex("date"))));
             result.add(comment);
         }
@@ -141,7 +142,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         String querySql = "SELECT * FROM " + PASSAGE_TABLE_NAME + " WHERE type = ?;";
         Cursor cursor = db.rawQuery(querySql, new String[] {type});
         while (cursor.moveToNext()) {
-            Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(cursor.getString(cursor.getColumnIndex("date"))));
+            Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
             result.add(passage);
         }
         cursor.close();
@@ -153,7 +154,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         String querySql = "SELECT * FROM " + PASSAGE_TABLE_NAME + " WHERE id = ?;";
         Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(passageId)});
         if (cursor.moveToFirst()) {
-            Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(cursor.getString(cursor.getColumnIndex("date"))));
+            Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
             cursor.close();
             return passage;
         } else {
@@ -166,7 +167,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         String querySql = "SELECT * FROM " + USER_TABLE_NAME + " WHERE id = ?;";
         Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(userId)});
         if (cursor.moveToFirst()) {
-            User user = new User(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("name")));
+            User user = new User(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("name")), cursor.getString(cursor.getColumnIndex("avatarBase64")));
             cursor.close();
             return user;
         } else {
@@ -190,10 +191,10 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     public List<Passage> getPraisedPassageByUserId(int userId) {
         List<Passage> result = new LinkedList<>();
         SQLiteDatabase db = getReadableDatabase();
-        String querySql = "SELECT Passage.id, Passage.title, Passage.author, Passage.content, Passage.date FROM " + PASSAGE_TABLE_NAME + ", " + PRAISE_TABLE_NAME + " WHERE Praise.userid = ?;";
+        String querySql = "SELECT Passage.id, Passage.title, Passage.author, Passage.content, Passage.date, Passage.avatarBase64 FROM " + PASSAGE_TABLE_NAME + ", " + PRAISE_TABLE_NAME + " WHERE Praise.userid = ?;";
         Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(userId)});
         while (cursor.moveToNext()) {
-            Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(cursor.getString(cursor.getColumnIndex("date"))));
+            Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
             result.add(passage);
         }
         cursor.close();

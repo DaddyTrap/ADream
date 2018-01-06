@@ -13,13 +13,15 @@ public class Passage {
     private String author;
     private String content;
     private Date date;
+    private String avatarBase64;
 
-    public Passage(int passageId, String title, String author, String content, Date date) {
+    public Passage(int passageId, String title, String author, String content, Date date, String avatarBase64) {
         this.passageId = passageId;
         this.title = title;
         this.author = author;
         this.content = content;
         this.date = date;
+        this.avatarBase64 = avatarBase64;
     }
 
     public int getPassageId() {
@@ -40,5 +42,9 @@ public class Passage {
 
     public Date getDate() {
         return date;
+    }
+
+    public String getAvatarBase64() {
+        return avatarBase64;
     }
 }
