@@ -108,8 +108,11 @@ public class StartupActivity extends AppCompatActivity {
         String[] permissionsToRequestArg = new String[permissionsToRequest.size()];
         permissionsToRequest.toArray(permissionsToRequestArg);
 
-        if (permissionsToRequestArr.length > 0)
+        if (permissionsToRequestArg.length > 0) {
             ActivityCompat.requestPermissions(this, permissionsToRequestArr, PERMISSION_REQ_CODE);
+        } else {
+            setViews();
+        }
     }
 
     @Override
