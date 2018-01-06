@@ -32,6 +32,7 @@
         <service android:name=".service.MusicService" />
 
         <activity android:name=".activity.CalendarActivity"></activity>
+        <activity android:name=".activity.EditMiaobiActivity"></activity>
     </application>
 
 </manifest>

@@ -32,7 +32,6 @@ import io.github.daddytrap.adream.ADApplication;
 import io.github.daddytrap.adream.R;
 import io.github.daddytrap.adream.adapter.CommonPagerAdapter;
 import io.github.daddytrap.adream.fragment.ADFragment;
-import io.github.daddytrap.adream.fragment.DemoFragment;
 import io.github.daddytrap.adream.fragment.JiuwuFragment;
 import io.github.daddytrap.adream.fragment.MiaobiFragment;
 import io.github.daddytrap.adream.fragment.ShiciFragment;
@@ -300,9 +299,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onPageScrollStateChanged(int state) {}
         });
 
-        toolbarTitleText = (TextView)findViewById(R.id.activity_main_toolbar_title);
-        toolbarWuImage = (ImageView)findViewById(R.id.activity_main_wu_icon);
-        toolbarPipaImage = (ImageView)findViewById(R.id.activity_main_pipa_icon);
+        toolbarTitleText = (TextView)findViewById(R.id.activity_edit_miaobi_toolbar_title);
+        toolbarWuImage = (ImageView)findViewById(R.id.activity_edit_miaobi_back_icon);
+        toolbarPipaImage = (ImageView)findViewById(R.id.activity_edit_miaobi_fa_icon);
         upIcon = (ImageView)findViewById(R.id.activity_main_up_icon);
 
         shiciText = (TextView)findViewById(R.id.activity_main_shici_text);
@@ -349,6 +348,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         blinkAnimation.setRepeatCount(Animation.INFINITE);
         upIcon.startAnimation(blinkAnimation);
 
+        // TODO: 判断今天是否已经摇签
         boolean shouldYaoqian = true;
         if (shouldYaoqian) {
             changeViewState(ViewState.Yaoqian);
