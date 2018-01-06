@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="500dp"
+    android:layout_height="match_parent">
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/drawer_layout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_gravity="start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.cesards.cropimageview.CropImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@mipmap/drawer_fuzhou"
+            android:background="@color/drawerBackground"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@mipmap/drawer_user_image"
+            android:layout_marginTop="50dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/drawer_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/drawer_user_name"
+            android:layout_marginTop="5dp"
+            style="@style/DrawerUser"
+            app:layout_constraintTop_toBottomOf="@+id/user_image"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/drawer_shi"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/drawer_shi"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawer_user_name"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/drawer_zan"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/drawer_zan"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawer_shi"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/drawer_ren"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/drawer_ren"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawer_zan"/>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.DrawerLayout>

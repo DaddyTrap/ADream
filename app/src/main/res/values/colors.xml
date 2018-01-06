@@ -5,4 +5,5 @@
     <!--<color name="colorPrimaryDark">#303F9F</color>-->
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="drawerBackground">#D3A7B1</color>
 </resources>
