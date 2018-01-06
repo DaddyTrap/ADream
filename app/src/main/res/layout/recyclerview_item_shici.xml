@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_shici_title"
+        android:textColor="#000"
+        android:textSize="@dimen/medium_font_size"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/item_shici_two_item_margn"
+        android:text="标题"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_shici_author"
+        android:textColor="#E0C778"
+        android:textSize="@dimen/mini_font_size"
+        android:layout_centerHorizontal="true"
+        android:text="[朝代]作者"
+        android:layout_below="@id/item_shici_title"
+        android:layout_marginTop="16dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_shici_content"
+        android:textColor="#bfbfbf"
+        android:text="道可道，非常道"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/item_shici_author"
+        android:textSize="@dimen/small_font_size"
+        android:maxLines="1"
+        android:layout_marginTop="16dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#d6d6d6"
+        android:layout_below="@id/item_shici_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="@dimen/item_shici_two_item_margn"/>
+</RelativeLayout>
