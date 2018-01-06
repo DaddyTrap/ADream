@@ -16,6 +16,7 @@ public class ADApplication extends Application {
 
     public Typeface KAI_TI_FONT;
     public Typeface SIM_KAI_FONT;
+    public Typeface FZ_SHUITI_FONT;
 
     @Override
     public void onCreate() {
@@ -27,6 +28,7 @@ public class ADApplication extends Application {
 
         KAI_TI_FONT = Typeface.createFromAsset(getAssets(), "fonts/kai_ti.ttf");
         SIM_KAI_FONT = Typeface.createFromAsset(getAssets(), "fonts/simkai.ttf");
+        FZ_SHUITI_FONT = Typeface.createFromAsset(getAssets(), "fonts/FZShuTi.ttf");
 
         File file = new File(Environment.getExternalStorageDirectory() + "/ADream/music");
         if (!file.exists()) {

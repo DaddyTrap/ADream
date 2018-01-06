@@ -69,7 +69,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void setView() {
         ADApplication app = ADApplication.getInstance();
         this.mMonth.setTypeface(app.KAI_TI_FONT);
-        this.mDay.setTypeface(app.KAI_TI_FONT);
+        this.mDay.setTypeface(app.FZ_SHUITI_FONT);
         this.mLunarDate.setTypeface(app.KAI_TI_FONT);
         this.mSuggestIcon.setTypeface(app.KAI_TI_FONT);
         this.mNotSuggestIcon.setTypeface(app.KAI_TI_FONT);
@@ -97,6 +97,8 @@ public class CalendarActivity extends AppCompatActivity {
                 CalendarActivity.this.finish();
             }
         });
+        mQian.setTypeface(app.KAI_TI_FONT);
+//        mQian.setText(queryQian());
     }
 
     private void requestHuangli(String url) {
