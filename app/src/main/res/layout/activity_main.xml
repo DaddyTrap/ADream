@@ -107,12 +107,12 @@
         <ImageView
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
-            android:id="@+id/activity_main_wu_icon"
+            android:id="@+id/activity_edit_miaobi_back_icon"
             android:src="@mipmap/wu_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/activity_main_toolbar_title"
+            android:id="@+id/activity_edit_miaobi_toolbar_title"
             android:layout_gravity="center"
             android:text=""
             android:textColor="#000"
@@ -120,11 +120,11 @@
         <ImageView
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
-            android:id="@+id/activity_main_pipa_icon"
+            android:id="@+id/activity_edit_miaobi_fa_icon"
             android:src="@mipmap/pipa_icon"
             android:layout_gravity="right"
             android:scaleType="fitEnd"
-            android:layout_marginRight="12dp"/>
+            android:layout_marginRight="16dp"/>
     </android.support.v7.widget.Toolbar>
 
     <include

@@ -35,4 +35,9 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="EditMiaobiEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#d6d6d6</item>
+        <item name="colorControlActivated">#d6d6d6</item>
+    </style>
+
 </resources>
