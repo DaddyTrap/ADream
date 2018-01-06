@@ -30,6 +30,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.daddytrap.adream.ADApplication;
 import io.github.daddytrap.adream.R;
 import io.github.daddytrap.adream.adapter.CommonPagerAdapter;
@@ -76,6 +77,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private DrawerLayout drawer;
     private ConstraintLayout drawerLayout;
+    private CircleImageView userImage;
+    private TextView userName;
+    private CircleImageView shi;
+    private CircleImageView zan;
+    private CircleImageView ren;
 
     private ADApplication app;
 
@@ -309,9 +315,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         toolbarPipaImage = (ImageView)findViewById(R.id.activity_edit_miaobi_fa_icon);
         upIcon = (ImageView)findViewById(R.id.activity_main_up_icon);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer);
-        drawerLayout = (ConstraintLayout) findViewById(R.id.drawer_layout);
-
         shiciText = (TextView)findViewById(R.id.activity_main_shici_text);
         jiuwuText = (TextView)findViewById(R.id.activity_main_jiuwu_text);
         miaobiText = (TextView)findViewById(R.id.activity_main_miaobi_text);
@@ -350,17 +353,45 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+        drawer = (DrawerLayout) findViewById(R.id.drawer);
+        drawerLayout = (ConstraintLayout) findViewById(R.id.drawer_layout);
+        userImage = (CircleImageView) findViewById(R.id.user_image);
+        userName = (TextView) findViewById(R.id.drawer_user_name);
+        shi = (CircleImageView) findViewById(R.id.drawer_shi);
+        zan = (CircleImageView) findViewById(R.id.drawer_zan);
+        ren = (CircleImageView) findViewById(R.id.drawer_ren);
+
+        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
         toolbarWuImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("click");
-                if (drawer.isDrawerOpen(drawerLayout)) {
-                    drawer.openDrawer(drawerLayout);
-                } else {
-                    drawer.closeDrawer(drawerLayout);
-                }
+                drawer.openDrawer(drawerLayout);
             }
         });
+
+        userName.setTypeface(app.KAI_TI_FONT);
 
         Animation blinkAnimation = new AlphaAnimation(0.2f, 1f);
         blinkAnimation.setDuration(1500);
