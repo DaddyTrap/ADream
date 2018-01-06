@@ -33,6 +33,7 @@
 
         <activity android:name=".activity.CalendarActivity"></activity>
         <activity android:name=".activity.EditMiaobiActivity"></activity>
+        <activity android:name=".activity.ShiciDetailActivity"></activity>
     </application>
 
 </manifest>
