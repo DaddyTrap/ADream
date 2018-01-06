@@ -66,11 +66,12 @@
                 android:src="@drawable/main_select_line" />
         </RelativeLayout>
         <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/activity_main_vase_image"
             android:src="@mipmap/vase_image"
             android:layout_below="@id/activity_main_title_layout"
+            android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"/>
         <ImageView
             android:layout_width="40dp"
@@ -78,6 +79,7 @@
             android:id="@+id/activity_main_up_icon"
             android:src="@drawable/ic_keyboard_arrow_up"
             android:layout_below="@id/activity_main_vase_image"
+            android:layout_marginTop="-10dp"
             android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 
@@ -121,6 +123,7 @@
             android:id="@+id/activity_main_pipa_icon"
             android:src="@mipmap/pipa_icon"
             android:layout_gravity="right"
+            android:scaleType="fitEnd"
             android:layout_marginRight="12dp"/>
     </android.support.v7.widget.Toolbar>
 

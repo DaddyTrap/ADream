@@ -349,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         blinkAnimation.setRepeatCount(Animation.INFINITE);
         upIcon.startAnimation(blinkAnimation);
 
+        // TODO: 判断今天是否已经摇签
         boolean shouldYaoqian = true;
         if (shouldYaoqian) {
             changeViewState(ViewState.Yaoqian);
