@@ -7,4 +7,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorCalendar">#8A1315</color>
     <color name="drawerBackground">#D3A7B1</color>
+    <color name="peopleBackground">#F5F1F2</color>
 </resources>

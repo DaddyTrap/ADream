@@ -393,6 +393,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         userName.setTypeface(app.KAI_TI_FONT);
 
+        ren.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PeopleActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Animation blinkAnimation = new AlphaAnimation(0.2f, 1f);
         blinkAnimation.setDuration(1500);
         blinkAnimation.setRepeatMode(Animation.REVERSE);

@@ -69,4 +69,8 @@
         <item name="colorControlActivated">#d6d6d6</item>
     </style>
 
+    <style name="PeopleText">
+        <item name="android:textSize">27sp</item>
+    </style>
+
 </resources>
