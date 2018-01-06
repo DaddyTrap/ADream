@@ -20,6 +20,7 @@ public class ADApplication extends Application {
     private static ADApplication _ADApplication;
 
     public Typeface KAI_TI_FONT;
+    public Typeface SIM_KAI_FONT;
 
     private Map<String, Bitmap> bitmapCache = null;
 
@@ -32,6 +33,7 @@ public class ADApplication extends Application {
             return;
 
         KAI_TI_FONT = Typeface.createFromAsset(getAssets(), "fonts/kai_ti.ttf");
+        SIM_KAI_FONT = Typeface.createFromAsset(getAssets(), "fonts/simkai.ttf");
 
         File file = new File(Environment.getExternalStorageDirectory() + "/ADream/music");
         if (!file.exists()) {

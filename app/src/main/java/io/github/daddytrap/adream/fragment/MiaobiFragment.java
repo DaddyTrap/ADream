@@ -9,6 +9,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import io.github.daddytrap.adream.R;
 import io.github.daddytrap.adream.adapter.CommonAdapter;
 import io.github.daddytrap.adream.model.Passage;
 import io.github.daddytrap.adream.viewholder.ViewHolder;
+import io.github.daddytrap.adream.activity.EditMiaobiActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +31,7 @@ public class MiaobiFragment extends ADFragment {
     private List<Passage> miaobiData;
     private CommonAdapter<Passage> miaobiAdapter = null;
     private static ADApplication application = ADApplication.getInstance();
+    private ImageView miaobiNewIcon;
 
 
     public static MiaobiFragment newInstance() {
@@ -46,9 +49,8 @@ public class MiaobiFragment extends ADFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         return createView(inflater, container, savedInstanceState, 2, R.layout.fragment_miaobi);
     }
 
@@ -86,6 +88,22 @@ public class MiaobiFragment extends ADFragment {
         });
         miaobiList.setAdapter(miaobiAdapter);
         miaobiList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-    }
+        miaobiNewIcon = (ImageView) view.findViewById(R.id.fragment_miaobi_new_icon);
+        miaobiNewIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MiaobiFragment.this.getActivity(), EditMiaobiActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        miaobiNewIcon = (ImageView) view.findViewById(R.id.fragment_miaobi_new_icon);
+        miaobiNewIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MiaobiFragment.this.getActivity(), EditMiaobiActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 }
