@@ -27,8 +27,11 @@
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activity.MusicActivity"/>
-        <service android:name=".service.MusicService"/>
+        <activity android:name=".activity.MusicActivity" />
+
+        <service android:name=".service.MusicService" />
+
+        <activity android:name=".activity.CalendarActivity"></activity>
     </application>
 
 </manifest>
