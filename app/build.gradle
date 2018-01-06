@@ -33,5 +33,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.cesards.android:cropimageview:1.0.2.1'
+    compile 'org.jsoup:jsoup:1.9.2'
     testCompile 'junit:junit:4.12'
 }
