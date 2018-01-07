@@ -59,12 +59,17 @@ public class MusicActivity extends AppCompatActivity {
 
     Intent musicServiceIntent;
 
+    ADSQLiteOpenHelper helper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_music);
 
         app = ADApplication.getInstance();
+
+        helper = new ADSQLiteOpenHelper(this);
+
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -174,19 +179,21 @@ public class MusicActivity extends AppCompatActivity {
         updateThread.start();
     }
 
+    Music getRandomMusic() {
+        List<Music> musicList = helper.getMusics();
+        if (musicList == null || musicList.isEmpty()) return null;
+        int rand = Math.abs(new Random().nextInt()) % musicList.size();
+
+        return musicList.get(rand);
+    }
+
     Music getRecommendMusic() {
-        ADSQLiteOpenHelper helper = new ADSQLiteOpenHelper(this, null);
         Date date = Calendar.getInstance().getTime();
         Music music = helper.getMusicByDate(date);
 
         if (music == null) {
             // If there is no music, generate one
-            List<Music> musicList = helper.getMusics();
-
-            if (musicList == null || musicList.isEmpty()) return null;
-
-            int rand = new Random().nextInt() % musicList.size();
-            music = musicList.get(rand);
+            music = getRandomMusic();
 
             // Insert today's recommend music
             helper.insertRecommend(date, music.getId());
@@ -267,9 +274,32 @@ public class MusicActivity extends AppCompatActivity {
                 MusicActivity.this.finish();
             }
         });
+
+        nextIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSound(getRandomMusic(), MusicService.SET_HARD);
+            }
+        });
+
+        locationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSound(getRecommendMusic(), MusicService.SET_HARD);
+            }
+        });
     }
 
     void setSound(final Music music, String mode) {
+        // Change UI
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                musicTitle.setText(music.getTitle());
+                musicLyric.setText(music.getLyric());
+            }
+        });
+
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
         data.writeStringArray(new String[] {music.getHref(), mode});
@@ -279,13 +309,17 @@ public class MusicActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Change UI
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                musicTitle.setText(music.getTitle());
-                musicLyric.setText(music.getLyric());
+        if (mode.equals(MusicService.SET_HARD)) {
+            data.recycle();
+            reply.recycle();
+            data = Parcel.obtain();
+            reply = Parcel.obtain();
+
+            try {
+                mBinder.transact(MusicService.PLAY_REQ, data, reply, 0);
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
-        });
+        }
     }
 }

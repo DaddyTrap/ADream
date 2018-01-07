@@ -96,7 +96,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         // Get date without time
         String dateStr = dateFormat.format(date);
         String insertRecommendSql = "INSERT INTO " + RECOMMEND_TABLE_NAME +
-                " VALUES (" + musicId + ", " + dateStr + ");";
+                " (musicid, date) VALUES (" + musicId + ", " + dateStr + ");";
         db.execSQL(insertRecommendSql);
     }
 
@@ -194,7 +194,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public List<Music> getMusics() {
         SQLiteDatabase db = getReadableDatabase();
-        String querySql = "SELECT * FROM " + MUSIC_TABLE_NAME;
+        String querySql = "SELECT * FROM " + MUSIC_TABLE_NAME + ";";
         Cursor cursor = db.rawQuery(querySql, null);
         List<Music> ret = new LinkedList<>();
         if (cursor.moveToFirst()) {
