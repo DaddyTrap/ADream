@@ -15,6 +15,7 @@ import java.util.List;
 import io.github.daddytrap.adream.model.Comment;
 import io.github.daddytrap.adream.model.Music;
 import io.github.daddytrap.adream.model.Passage;
+import io.github.daddytrap.adream.model.Qian;
 import io.github.daddytrap.adream.model.User;
 
 /**
@@ -29,6 +30,8 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String COMMENT_TABLE_NAME = "Comment";
     private static final String MUSIC_TABLE_NAME = "Music";
     private static final String RECOMMEND_TABLE_NAME = "Recommend";
+    private static final String QIAN_TABLE_NAME = "Qian";
+    private static final String DATE_QIAN_TABLE_NAME = "DateQian";
     private static final int DB_VERSION = 1;
 
     private DateFormat dateFormat;
@@ -66,11 +69,20 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     }
 
     public void insertPraise(int userId, int passageId) {
-        SQLiteDatabase db =getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         String insertPraiseSql = "INSERT INTO " + PRAISE_TABLE_NAME +
                 " (userid, passageid) VALUES (" + userId +
                 ", " + passageId + ");";
         db.execSQL(insertPraiseSql);
+    }
+
+    public void insertDateQian(int qianId, int userId, Date date) {
+        SQLiteDatabase db = getWritableDatabase();
+        String insertDateQianSql = "INSERT INTO " + DATE_QIAN_TABLE_NAME +
+                " (qianid, userid, date) VALUES (" + qianId +
+                ", " + userId +
+                ", " + dateFormat.format(date) + ");";
+        db.execSQL(insertDateQianSql);
     }
 
     public void deletePraise(int userId, int passageId) {
@@ -247,5 +259,32 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
             cursor.close();
             return false;
         }
+    }
+
+    public Qian getQianById(int qianId) {
+        SQLiteDatabase db = getReadableDatabase();
+        String querySql = "SELECT * FROM " + QIAN_TABLE_NAME +
+                " WHERE id = ?;";
+        Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(qianId)});
+        Qian qian = null;
+        if (cursor.moveToFirst()) {
+            qian = new Qian(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("content")));
+        }
+        cursor.close();
+        return qian;
+    }
+
+    public Qian getQianByUserIdAndDate(int userId, Date date) {
+        SQLiteDatabase db = getReadableDatabase();
+        String querySql = "SELECT Qian.id, Qian.title, Qian.content FROM " +
+                QIAN_TABLE_NAME + " AND " + DATE_QIAN_TABLE_NAME +
+                "WHERE DateQian.userid = ? AND DateQian.date = ? AND DateQian.qianid = Qian.id;";
+        Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(userId), String.valueOf(date)});
+        Qian qian = null;
+        if (cursor.moveToFirst()) {
+            qian = new Qian(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("content")));
+        }
+        cursor.close();
+        return qian;
     }
 }
