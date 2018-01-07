@@ -45,6 +45,7 @@ public class MusicActivity extends AppCompatActivity {
     private TextView timeText;
     private TextView maxTimeText;
     private ImageView backIcon;
+    private ImageView background;
 
     private Handler handler;
     public static final int REFRESH_REQ = 110;
@@ -234,6 +235,8 @@ public class MusicActivity extends AppCompatActivity {
         timeText = (TextView)findViewById(R.id.activity_music_time);
         maxTimeText = (TextView)findViewById(R.id.activity_music_max_time);
 
+        background = (ImageView)findViewById(R.id.activity_music_background);
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -297,6 +300,13 @@ public class MusicActivity extends AppCompatActivity {
             public void run() {
                 musicTitle.setText(music.getTitle());
                 musicLyric.setText(music.getLyric());
+
+                // Random background
+                int index = Math.abs(new Random().nextInt()) % backgroundList.length;
+                background.setImageResource(backgroundList[index]);
+
+                timeText.setText("正在加载...");
+                maxTimeText.setText("稍安勿躁");
             }
         });
 
@@ -322,4 +332,6 @@ public class MusicActivity extends AppCompatActivity {
             }
         }
     }
+
+    private static final int[] backgroundList = new int[] {R.mipmap.music_background_0, R.mipmap.music_background_1, R.mipmap.music_background_2, R.mipmap.music_background_3, R.mipmap.music_background_4};
 }

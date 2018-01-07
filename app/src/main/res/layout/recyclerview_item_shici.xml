@@ -33,7 +33,7 @@
         android:layout_marginTop="16dp"/>
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="#d6d6d6"
         android:layout_below="@id/item_shici_content"
         android:layout_marginLeft="16dp"
