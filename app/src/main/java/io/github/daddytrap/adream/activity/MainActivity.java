@@ -32,12 +32,14 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.daddytrap.adream.ADApplication;
+import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
 import io.github.daddytrap.adream.adapter.CommonPagerAdapter;
 import io.github.daddytrap.adream.fragment.ADFragment;
 import io.github.daddytrap.adream.fragment.JiuwuFragment;
 import io.github.daddytrap.adream.fragment.MiaobiFragment;
 import io.github.daddytrap.adream.fragment.ShiciFragment;
+import io.github.daddytrap.adream.model.User;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private CircleImageView ren;
 
     private ADApplication app;
+    private ADSQLiteOpenHelper helper;
 
     private SensorManager sensorManager;
     private Sensor accSensor;
@@ -353,10 +356,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+        User user = helper.getUserById(app.currentUserId);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         drawerLayout = (ConstraintLayout) findViewById(R.id.drawer_layout);
         userImage = (CircleImageView) findViewById(R.id.user_image);
+        userImage.setImageBitmap(app.getBitmap(user.getAvatarBase64()));
         userName = (TextView) findViewById(R.id.drawer_user_name);
+        userName.setText(user.getUserName());
         shi = (CircleImageView) findViewById(R.id.drawer_shi);
         zan = (CircleImageView) findViewById(R.id.drawer_zan);
         ren = (CircleImageView) findViewById(R.id.drawer_ren);
@@ -420,6 +427,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
 
         app = ADApplication.getInstance();
+        helper = new ADSQLiteOpenHelper(getBaseContext(), null);
         mediaPlayer = MediaPlayer.create(this, R.raw.yaoqian_se);
         handler = new Handler() {
             @Override
