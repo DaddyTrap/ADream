@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:src="@mipmap/jiuwu_detail_test_image"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
@@ -36,22 +36,21 @@
                 android:layout_marginLeft="50dp"
                 android:textColor="#000"
                 android:text="标题"
-                android:textSize="@dimen/large_font_size"
-                android:ems="1" />
+                android:textSize="@dimen/large_font_size" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/activity_jiuwu_detail_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="100dp"
-                android:layout_marginTop="70dp"
+                android:layout_below="@id/activity_jiuwu_detail_title"
+                android:layout_alignLeft="@id/activity_jiuwu_detail_title"
+                android:layout_alignParentRight="true"
                 android:textColor="#000"
-                android:text="一二三四五\七八九十十一十二"
+                android:text="一二三四五六七八九十十一十二十三"
                 android:textSize="@dimen/medium_font_size"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="100dp" />
-        </LinearLayout>
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="50dp" />
+        </RelativeLayout>
     </LinearLayout>
 
     

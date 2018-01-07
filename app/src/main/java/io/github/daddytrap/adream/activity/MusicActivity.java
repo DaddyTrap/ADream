@@ -13,6 +13,7 @@ import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -20,10 +21,15 @@ import org.w3c.dom.Text;
 
 import java.nio.channels.SelectionKey;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import io.github.daddytrap.adream.ADApplication;
+import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
+import io.github.daddytrap.adream.model.Music;
 import io.github.daddytrap.adream.service.MusicService;
 import io.github.daddytrap.adream.util.ADUtil;
 
@@ -119,14 +125,13 @@ public class MusicActivity extends AppCompatActivity {
                 }
                 int[] rep = new int[3];
                 reply.readIntArray(rep);
-                // TODO: 随机歌曲、更换名字/歌词
                 // A Thread is needed, otherwise it will stuck the UI
                 Thread thread = new Thread() {
                     @Override
                     public void run() {
                         super.run();
-                        String soundUrl = "http://123.207.93.25/歌曲1故梦.mp3";
-                        setSound(soundUrl, MusicService.SET_SOFT);
+                        Music music = getRecommendMusic();
+                        setSound(music, MusicService.SET_SOFT);
                     }
                 };
                 thread.start();
@@ -163,6 +168,27 @@ public class MusicActivity extends AppCompatActivity {
         };
 
         updateThread.start();
+    }
+
+    Music getRecommendMusic() {
+        ADSQLiteOpenHelper helper = new ADSQLiteOpenHelper(this);
+        Date date = Calendar.getInstance().getTime();
+        Music music = helper.getMusicByDate(date);
+
+        if (music == null) {
+            // If there is no music, generate one
+            List<Music> musicList = helper.getMusics();
+
+            if (musicList.isEmpty()) return null;
+
+            int rand = new Random().nextInt() % musicList.size();
+            music = musicList.get(rand);
+
+            // Insert today's recommend music
+            helper.insertRecommend(date, music.getId());
+        }
+
+        return music;
     }
 
     @Override
@@ -239,14 +265,23 @@ public class MusicActivity extends AppCompatActivity {
         });
     }
 
-    void setSound(String soundUrl, String mode) {
+    void setSound(final Music music, String mode) {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
-        data.writeStringArray(new String[] {soundUrl, mode});
+        data.writeStringArray(new String[] {music.getHref(), mode});
         try {
             mBinder.transact(MusicService.SET_REQ, data, reply, 0);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
+        // Change UI
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                musicTitle.setText(music.getTitle());
+                musicLyric.setText(music.getLyric());
+            }
+        });
     }
 }
