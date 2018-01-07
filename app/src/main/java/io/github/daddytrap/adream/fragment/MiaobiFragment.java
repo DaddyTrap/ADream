@@ -128,7 +128,8 @@ public class MiaobiFragment extends ADFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDIT_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                miaobiData = helper.getPassageByType("miaobi");
+                miaobiData.clear();
+                miaobiData.addAll(helper.getPassageByType("miaobi"));
                 miaobiAdapter.notifyDataSetChanged();
             }
         }

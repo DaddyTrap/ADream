@@ -60,12 +60,13 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     public void insertMiaoBi(Passage passage) {
         SQLiteDatabase db = getWritableDatabase();
         String insertMiaoBiSql = "INSERT INTO " + PASSAGE_TABLE_NAME +
-                "(title, author, content, date, type)" +
-                " VALUES (" + passage.getTitle() +
-                ", " + passage.getAuthor() +
-                ", " + passage.getContent() +
-                ", " + String.valueOf(passage.getDate()) +
-                ", miaobi);";
+                " (title, author, content, date, type, avatarBase64)" +
+                " VALUES (\"" + passage.getTitle() +
+                "\", \"" + passage.getAuthor() +
+                "\", \"" + passage.getContent() +
+                "\", \"" + dateFormat.format(passage.getDate()) +
+                "\", \"miaobi\"" +
+                ",\"" + passage.getAvatarBase64() + "\");";
         db.execSQL(insertMiaoBiSql);
     }
 
@@ -139,16 +140,19 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         String querySql = "SELECT * FROM " + PASSAGE_TABLE_NAME + " WHERE type = \"" + type+ "\";";
         Cursor cursor = db.rawQuery(querySql, null);
         try {
-            while (cursor.moveToNext()) {
-                Passage passage;
-                if (type.equals("miaobi")) {
-                    passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), dateFormat.parse(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
-                } else {
-                    passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(), cursor.getString(cursor.getColumnIndex("avatarBase64")));
-                }
-                result.add(passage);
+            if (cursor.moveToFirst()) {
+                do {
+                    Passage passage;
+                    if (type.equals("miaobi")) {
+                        passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), dateFormat.parse(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                    } else {
+                        passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                    }
+                    result.add(passage);
+                } while (cursor.moveToNext());
+            } else {
+                cursor.close();
             }
-            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

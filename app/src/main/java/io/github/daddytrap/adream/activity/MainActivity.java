@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         ADFragment curFragment = (ADFragment) mSectionsPagerAdapter.getItem(position);
 
         if (currentViewState == ViewState.Main) {
+            Log.i(MainActivity.class.getName(), curFragment.toString());
             curFragment.fragView.setVisibility(View.INVISIBLE);
             toolbarTitleText.setText("");
         } else if (currentViewState == ViewState.Detail) {
