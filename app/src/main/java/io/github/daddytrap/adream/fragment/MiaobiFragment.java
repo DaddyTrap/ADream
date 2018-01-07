@@ -29,6 +29,8 @@ import io.github.daddytrap.adream.model.Passage;
 import io.github.daddytrap.adream.viewholder.ViewHolder;
 import io.github.daddytrap.adream.activity.EditMiaobiActivity;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -43,6 +45,8 @@ public class MiaobiFragment extends ADFragment {
     private DateFormat format = new SimpleDateFormat("MM-dd");
 
     private ADSQLiteOpenHelper helper;
+
+    private static final int EDIT_REQUEST_CODE = 1;
 
 
     public static MiaobiFragment newInstance() {
@@ -113,9 +117,20 @@ public class MiaobiFragment extends ADFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MiaobiFragment.this.getActivity(), EditMiaobiActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, EDIT_REQUEST_CODE);
             }
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                miaobiData = helper.getPassageByType("miaobi");
+                miaobiAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }
