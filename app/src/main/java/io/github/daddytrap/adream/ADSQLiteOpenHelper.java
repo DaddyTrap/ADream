@@ -56,6 +56,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     public void insertMiaoBi(Passage passage) {
         SQLiteDatabase db = getWritableDatabase();
         String insertMiaoBiSql = "INSERT INTO " + PASSAGE_TABLE_NAME +
+                "(title, author, content, date, type)" +
                 " VALUES (" + passage.getTitle() +
                 ", " + passage.getAuthor() +
                 ", " + passage.getContent() +
@@ -84,6 +85,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     public void insertComment(Comment comment, int passageId) {
         SQLiteDatabase db = getWritableDatabase();
         String insertCommentSql = "INSERT INTO " + COMMENT_TABLE_NAME +
+                "(content, date, passageid, userid)" +
                 " VALUES (" + comment.getContent() +
                 ", " + String.valueOf(comment.getDate()) +
                 ", " + passageId +
