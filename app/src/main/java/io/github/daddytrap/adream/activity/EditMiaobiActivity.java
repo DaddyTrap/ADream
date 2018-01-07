@@ -19,9 +19,14 @@ import org.w3c.dom.Text;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
 
 import io.github.daddytrap.adream.ADApplication;
+import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
+import io.github.daddytrap.adream.model.Passage;
+import io.github.daddytrap.adream.model.User;
 import io.github.daddytrap.adream.util.ADUtil;
 
 public class EditMiaobiActivity extends AppCompatActivity {
@@ -40,6 +45,7 @@ public class EditMiaobiActivity extends AppCompatActivity {
     public static final int PICK_IMAGE_REQ_CODE = 100;
 
     boolean imageSelected = false;
+    String imageBase64;
 
     private AlertDialog.Builder dialogBuilder;
 
@@ -49,6 +55,8 @@ public class EditMiaobiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_miaobi);
 
         app = ADApplication.getInstance();
+
+        setResult(RESULT_CANCELED);
 
         setViews();
     }
@@ -79,13 +87,26 @@ public class EditMiaobiActivity extends AppCompatActivity {
             }
         });
 
-        // TODO: 发布妙笔
         faIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!imageSelected || miaobiTitle.getText().toString().isEmpty() || miaobiContent.getText().toString().isEmpty()) {
+                String title = miaobiTitle.getText().toString();
+                String content = miaobiContent.getText().toString();
+
+                if (!imageSelected || title.isEmpty() || content.isEmpty()) {
                     dialogBuilder.create().show();
+                    return;
                 }
+
+                Date date = Calendar.getInstance().getTime();
+
+                ADSQLiteOpenHelper helper = new ADSQLiteOpenHelper(EditMiaobiActivity.this);
+                User user = helper.getUserById(app.currentUserId);
+                Passage passage = new Passage(-1, title, user.getUserName(), content, date, imageBase64);
+
+                helper.insertMiaoBi(passage);
+                EditMiaobiActivity.this.setResult(RESULT_OK);
+                EditMiaobiActivity.this.finish();
             }
         });
 
@@ -125,8 +146,8 @@ public class EditMiaobiActivity extends AppCompatActivity {
                     e.printStackTrace();
                     return;
                 }
-//                momentForRes.contentImgBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
-//
+                imageBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+
                 // Set preview image
                 Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 addPhoto.setImageBitmap(bm);
