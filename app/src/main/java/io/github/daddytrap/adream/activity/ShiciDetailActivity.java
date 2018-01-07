@@ -7,8 +7,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.github.daddytrap.adream.ADApplication;
+import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
+import io.github.daddytrap.adream.model.Passage;
 
 public class ShiciDetailActivity extends AppCompatActivity {
 
@@ -19,8 +24,9 @@ public class ShiciDetailActivity extends AppCompatActivity {
 
     ImageView backIcon;
 
-    int id;
+    Passage thisPassage;
     boolean zanned = false;
+    ADSQLiteOpenHelper helper;
 
     ADApplication app;
 
@@ -35,6 +41,18 @@ public class ShiciDetailActivity extends AppCompatActivity {
     }
 
     void setViews() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        final int passageId = extras.getInt("passage_id", -1);
+
+        helper = new ADSQLiteOpenHelper(this);
+        thisPassage = helper.getPassageById(passageId);
+
+        if (thisPassage == null) {
+            finish();
+            return;
+        }
+
         titleTextView = (TextView)findViewById(R.id.activity_shici_title);
         authorTextView = (TextView)findViewById(R.id.activity_shici_author);
         contentTextView = (TextView)findViewById(R.id.activity_shici_content);
@@ -45,23 +63,23 @@ public class ShiciDetailActivity extends AppCompatActivity {
         authorTextView.setTypeface(app.KAI_TI_FONT);
         contentTextView.setTypeface(app.KAI_TI_FONT);
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        id = extras.getInt("id", -1);
-        titleTextView.setText(extras.getString("title", ""));
-        authorTextView.setText(extras.getString("author", ""));
-        contentTextView.setText(extras.getString("content", ""));
-        zanned = extras.getBoolean("zan", false);
+        titleTextView.setText(thisPassage.getTitle());
+        authorTextView.setText(thisPassage.getAuthor());
+        contentTextView.setText(thisPassage.getContent());
+        zanned = helper.getPraiseByUserIdAndPassageId(app.currentUserId, thisPassage.getPassageId());
+
         zanImageView.setImageResource(zanned ? R.mipmap.zanned_icon : R.mipmap.zan_icon);
 
         zanImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 zanned = !zanned;
+                if (zanned) {
+                    helper.insertPraise(app.currentUserId, thisPassage.getPassageId());
+                } else {
+                    helper.deletePraise(app.currentUserId, thisPassage.getPassageId());
+                }
                 zanImageView.setImageResource(zanned ? R.mipmap.zanned_icon : R.mipmap.zan_icon);
-                Intent resIntent = new Intent();
-                resIntent.putExtra("zanned", zanned);
-                ShiciDetailActivity.this.setResult(RESULT_OK, resIntent);
             }
         });
 

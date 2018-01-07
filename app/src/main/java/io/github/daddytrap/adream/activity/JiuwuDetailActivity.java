@@ -45,7 +45,6 @@ public class JiuwuDetailActivity extends AppCompatActivity {
         thisPassage = helper.getPassageById(passageId);
 
         if (thisPassage == null) {
-            Toast.makeText(this, R.string.nothing_found, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }

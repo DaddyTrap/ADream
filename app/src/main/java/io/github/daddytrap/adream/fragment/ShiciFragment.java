@@ -19,6 +19,7 @@ import java.util.List;
 import io.github.daddytrap.adream.ADApplication;
 import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
+import io.github.daddytrap.adream.activity.ShiciDetailActivity;
 import io.github.daddytrap.adream.adapter.CommonAdapter;
 import io.github.daddytrap.adream.model.Passage;
 import io.github.daddytrap.adream.viewholder.ViewHolder;
@@ -55,6 +56,8 @@ public class ShiciFragment extends ADFragment {
     List<Passage> shicis;
     ADApplication app;
 
+    ADSQLiteOpenHelper helper;
+
     public static final int SHICI_DETAIL_REQ = 100;
 
     @Override
@@ -62,9 +65,9 @@ public class ShiciFragment extends ADFragment {
         super.onViewCreated(view, savedInstanceState);
 
         app = ADApplication.getInstance();
+        helper = new ADSQLiteOpenHelper(this.getActivity());
 
-        // TODO: 获取数据库中的诗词
-        shicis = new LinkedList<>();
+        shicis = helper.getPassageByType("shici");
 
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_shici_recyclerview);
         adapter = new CommonAdapter<Passage>(this.getActivity(), R.layout.recyclerview_item_shici, shicis) {
@@ -94,29 +97,14 @@ public class ShiciFragment extends ADFragment {
         adapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(ShiciFragment.this.getActivity(), ShiciDetailActivity.class);
                 Passage shici = shicis.get(position);
-                intent.putExtra("titile", shici.getTitle());
-                intent.putExtra("author", shici.getAuthor());
-                intent.putExtra("content", shici.getContent());
-                // TODO: 获取是否被赞
-                intent.putExtra("zanned", true);
-
-                startActivityForResult(intent, SHICI_DETAIL_REQ);
+                intent.putExtra("passage_id", shici.getPassageId());
+                startActivity(intent);
             }
 
             @Override
             public void onLongClick(int position) {}
         });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SHICI_DETAIL_REQ && resultCode == RESULT_OK) {
-            boolean zanned = data.getBooleanExtra("zanned", false);
-            Log.i(ShiciFragment.class.getName(), zanned ? "赞了" : "没赞");
-            // TODO: 更新赞信息
-        }
     }
 }
