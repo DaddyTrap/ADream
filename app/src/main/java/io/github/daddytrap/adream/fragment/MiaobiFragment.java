@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -37,6 +39,8 @@ public class MiaobiFragment extends ADFragment {
     private CommonAdapter<Passage> miaobiAdapter = null;
     private static ADApplication application = ADApplication.getInstance();
     private ImageView miaobiNewIcon;
+
+    private DateFormat format = new SimpleDateFormat("MM-dd");
 
     private ADSQLiteOpenHelper helper;
 
@@ -67,9 +71,7 @@ public class MiaobiFragment extends ADFragment {
 
         helper = new ADSQLiteOpenHelper(getContext(), null);
         miaobiList = (RecyclerView) fragView.findViewById(R.id.recycler);
-        // TODO : 获取数据
         miaobiData = helper.getPassageByType("miaobi");
-        System.out.println("Size:" + miaobiData.size());
 
         miaobiAdapter = new CommonAdapter<Passage>(getContext(), R.layout.miaobi_item, miaobiData) {
             @Override
@@ -78,17 +80,25 @@ public class MiaobiFragment extends ADFragment {
                 image.setImageBitmap(application.getBitmap(object.getAvatarBase64()));
                 TextView title = holder.getView(R.id.title);
                 title.setText(object.getTitle());
+                title.setTypeface(application.KAI_TI_FONT);
                 TextView content = holder.getView(R.id.content);
                 content.setText(object.getContent());
+                content.setTypeface(application.KAI_TI_FONT);
+                TextView author = holder.getView(R.id.author);
+                author.setText(object.getAuthor());
+                author.setTypeface(application.KAI_TI_FONT);
+                TextView date = holder.getView(R.id.date);
+                date.setText(String.valueOf(format.format(object.getDate())));
+                date.setTypeface(application.KAI_TI_FONT);
             }
         };
         miaobiAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 // TODO : 填写Activity
-                Intent intent = new Intent();
-                intent.putExtra("id", miaobiData.get(position).getPassageId());
-                startActivity(intent);
+//                Intent intent = new Intent();
+//                intent.putExtra("id", miaobiData.get(position).getPassageId());
+//                startActivity(intent);
             }
 
             @Override
