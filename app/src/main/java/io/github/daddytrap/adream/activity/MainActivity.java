@@ -27,17 +27,23 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.daddytrap.adream.ADApplication;
+import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
 import io.github.daddytrap.adream.adapter.CommonPagerAdapter;
 import io.github.daddytrap.adream.fragment.ADFragment;
 import io.github.daddytrap.adream.fragment.JiuwuFragment;
 import io.github.daddytrap.adream.fragment.MiaobiFragment;
 import io.github.daddytrap.adream.fragment.ShiciFragment;
+import io.github.daddytrap.adream.model.Qian;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -84,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private CircleImageView ren;
 
     private ADApplication app;
+    private ADSQLiteOpenHelper helper;
 
     private SensorManager sensorManager;
     private Sensor accSensor;
@@ -212,13 +219,31 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 yaoqianLayout.setVisibility(View.VISIBLE);
                 break;
             case YaoqianFinish:
-                // TODO: 随机签
+                Qian qian = getRandomQian();
+                if (qian != null) {
+                    // Show
+                    yaoqianHint0.setText(qian.getTitle());
+                    yaoqianHint1.setText(qian.getContent());
+
+                    // Save
+                    Date date = Calendar.getInstance().getTime();
+                    helper.insertDateQian(qian.getQianId(), app.currentUserId, date);
+                }
+
                 animation = new ScaleAnimation(0, 1, 0, 1);
                 animation.setDuration(300);
                 yaoqianQianImage.setImageResource(R.mipmap.qian_one);
                 yaoqianQianImage.startAnimation(animation);
+                break;
         }
         titleImage.setImageResource(IndexToTitleImageResID.get(curIndex));
+    }
+
+    Qian getRandomQian() {
+        List<Qian> qians = helper.getQians();
+        int index = Math.abs(new Random().nextInt()) % qians.size();
+
+        return qians.get(index);
     }
 
     @Override
@@ -407,9 +432,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         blinkAnimation.setRepeatCount(Animation.INFINITE);
         upIcon.startAnimation(blinkAnimation);
 
-        // TODO: 判断今天是否已经摇签
-        boolean shouldYaoqian = true;
-        if (shouldYaoqian) {
+        Date date = Calendar.getInstance().getTime();
+        Qian qian = helper.getQianByUserIdAndDate(app.currentUserId, date);
+        if (qian == null) {
             changeViewState(ViewState.Yaoqian);
         }
     }
@@ -432,6 +457,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             }
         };
+        helper = new ADSQLiteOpenHelper(this);
 
         setViews();
     }

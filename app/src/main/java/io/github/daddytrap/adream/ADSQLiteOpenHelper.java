@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.ListView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -81,7 +82,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         String insertDateQianSql = "INSERT INTO " + DATE_QIAN_TABLE_NAME +
                 " (qianid, userid, date) VALUES (" + qianId +
                 ", " + userId +
-                ", " + dateFormat.format(date) + ");";
+                ", \"" + dateFormat.format(date) + "\");";
         db.execSQL(insertDateQianSql);
     }
 
@@ -274,12 +275,31 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         return qian;
     }
 
+    public List<Qian> getQians() {
+        SQLiteDatabase db = getReadableDatabase();
+        String querySql = "SELECT * FROM " + QIAN_TABLE_NAME + ";";
+        Cursor cursor = db.rawQuery(querySql, null);
+
+        List<Qian> ret = new LinkedList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                ret.add(new Qian(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("content"))));
+            } while (cursor.moveToNext());
+        } else {
+            cursor.close();
+            return null;
+        }
+        return ret;
+    }
+
     public Qian getQianByUserIdAndDate(int userId, Date date) {
         SQLiteDatabase db = getReadableDatabase();
         String querySql = "SELECT Qian.id, Qian.title, Qian.content FROM " +
-                QIAN_TABLE_NAME + " AND " + DATE_QIAN_TABLE_NAME +
-                "WHERE DateQian.userid = ? AND DateQian.date = ? AND DateQian.qianid = Qian.id;";
-        Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(userId), String.valueOf(date)});
+                QIAN_TABLE_NAME + ", " + DATE_QIAN_TABLE_NAME +
+                " WHERE DateQian.userid = ? AND DateQian.date = ? AND DateQian.qianid = Qian.id;";
+        String dateStr = dateFormat.format(date);
+        Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(userId), dateStr});
         Qian qian = null;
         if (cursor.moveToFirst()) {
             qian = new Qian(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("content")));
