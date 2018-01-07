@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/item_shici_content"
         android:textColor="#bfbfbf"
-        android:text="道可道，非常道"
+        android:text="道可道，非常道。"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/item_shici_author"
         android:textSize="@dimen/small_font_size"

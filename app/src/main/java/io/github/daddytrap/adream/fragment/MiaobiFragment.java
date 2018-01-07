@@ -97,13 +97,5 @@ public class MiaobiFragment extends ADFragment {
             }
         });
 
-        miaobiNewIcon = (ImageView) view.findViewById(R.id.fragment_miaobi_new_icon);
-        miaobiNewIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MiaobiFragment.this.getActivity(), EditMiaobiActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 }
