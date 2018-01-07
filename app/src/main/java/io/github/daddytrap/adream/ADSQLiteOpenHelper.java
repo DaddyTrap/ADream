@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,12 +15,13 @@ import io.github.daddytrap.adream.model.Music;
 import io.github.daddytrap.adream.model.Passage;
 import io.github.daddytrap.adream.model.User;
 
+
 /**
  * Created by 74187 on 2018/1/5.
  */
 
 public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "Contacts.db";
+    private static final String DB_NAME = "ADream.db";
     private static final String USER_TABLE_NAME = "User";
     private static final String PASSAGE_TABLE_NAME = "Passage";
     private static final String PRAISE_TABLE_NAME = "Praise";
@@ -28,57 +30,15 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String RECOMMEND_TABLE_NAME = "Recommend";
     private static final int DB_VERSION = 1;
 
-    public ADSQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+    public ADSQLiteOpenHelper(Context context, SQLiteDatabase.CursorFactory factory) {
+        super(context, DB_NAME, factory, DB_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createUserTableSql = "CREATE TABLE " + USER_TABLE_NAME +
-                "(id integer primary key , " +
-                "name text , " +
-                "avatarBase64 text);";
-        db.execSQL(createUserTableSql);
 
-        String createPassageTableSql = "CREATE TABLE " + PASSAGE_TABLE_NAME +
-                "(id integer primary key ," +
-                "title text," +
-                "author text," +
-                "content text," +
-                "date text," +
-                "type text," +
-                "avatarBase64 text"+ ");";
-        db.execSQL(createPassageTableSql);
-
-        String createCommentTableSql = "CREATE TABLE " + COMMENT_TABLE_NAME +
-                "(id integer primary key," +
-                "content text," +
-                "date text," +
-                "passageid integer," +
-                "userid integer," +
-                "FOREIGN KEY(passageid) REFERENCES " + PASSAGE_TABLE_NAME + "(id)," +
-                "FOREIGN KEY(userid) REFERENCES " + USER_TABLE_NAME + "(id));";
-        db.execSQL(createCommentTableSql);
-
-        String createPraiseTableSql = "CREATE TABLE " + PRAISE_TABLE_NAME +
-                "(id integer primary key," +
-                "userid integer," +
-                "passageid integer," +
-                "FOREIGN KEY(userid) REFERENCES User(id)," +
-                "FOREIGN KEY(passageid) REFERENCES Passage(id));";
-        db.execSQL(createPraiseTableSql);
-
-        String createMusicTableSql = "CREATE TABLE " + MUSIC_TABLE_NAME +
-                "(id integer primary key," +
-                "localpath text," +
-                "href text);";
-        db.execSQL(createMusicTableSql);
-
-        String createRecommendTableSql = "CREATE TABLE " + RECOMMEND_TABLE_NAME +
-                "(id integer primary key," +
-                "musicid integer," +
-                "date text);";
-        db.execSQL(createRecommendTableSql);
     }
 
     @Override
@@ -103,6 +63,15 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
                 " VALUES (" + userId +
                 ", " + passageId + ");";
         db.execSQL(insertPraiseSql);
+    }
+
+    public void deletePraise(int userId, int passageId) {
+        SQLiteDatabase db = getWritableDatabase();
+        String deletePraiseSql = "DELETE FROM " + PRAISE_TABLE_NAME +
+                " WHERE userid = " + userId +
+                " AND passageid = " + passageId +
+                ";";
+        db.execSQL(deletePraiseSql);
     }
 
     public void insertComment(Comment comment, int passageId) {
@@ -139,13 +108,17 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     public List<Passage> getPassageByType(String type) {
         List<Passage> result = new LinkedList<>();
         SQLiteDatabase db = getReadableDatabase();
-        String querySql = "SELECT * FROM " + PASSAGE_TABLE_NAME + " WHERE type = ?;";
-        Cursor cursor = db.rawQuery(querySql, new String[] {type});
-        while (cursor.moveToNext()) {
-            Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
-            result.add(passage);
+        String querySql = "SELECT * FROM " + PASSAGE_TABLE_NAME + " WHERE type = \"" + type+ "\";";
+        Cursor cursor = db.rawQuery(querySql, null);
+        try {
+            while (cursor.moveToNext()) {
+                Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), format.parse(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                result.add(passage);
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        cursor.close();
         return result;
     }
 
@@ -199,5 +172,26 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return result;
+    }
+
+    public boolean getPraiseByUserIdAndPassageId(int userId, int passageId) {
+        SQLiteDatabase db = getReadableDatabase();
+        String querySql = "SELECT COUNT(*) FROM " + PRAISE_TABLE_NAME +
+                " WHERE userid = ?" +
+                " AND passageid = ?" +
+                ";";
+        Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(userId), String.valueOf(passageId)});
+        if (cursor.moveToFirst()) {
+            if (cursor.getInt(0) == 0) {
+                cursor.close();
+                return false;
+            } else {
+                cursor.close();
+                return true;
+            }
+        } else {
+            cursor.close();
+            return false;
+        }
     }
 }

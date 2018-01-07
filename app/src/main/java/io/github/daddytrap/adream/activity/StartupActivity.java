@@ -25,6 +25,7 @@ import java.util.TimerTask;
 
 import io.github.daddytrap.adream.ADApplication;
 import io.github.daddytrap.adream.R;
+import io.github.daddytrap.adream.sqlitemanager.SQLiteDbManager;
 import io.github.daddytrap.adream.util.ADUtil;
 
 public class StartupActivity extends AppCompatActivity {
@@ -39,6 +40,8 @@ public class StartupActivity extends AppCompatActivity {
     private TextView publicDateView;
     private TextView traditionDateView;
     private ADApplication app;
+
+    private SQLiteDbManager manager = new SQLiteDbManager();
 
     void setViews() {
         publicDateView = (TextView)findViewById(R.id.activity_startup_public_date);
@@ -129,6 +132,7 @@ public class StartupActivity extends AppCompatActivity {
         if (somethingNotGranted) {
             permissionWarnDialogBuilder.create().show();
         } else {
+            manager.openDatabase(getBaseContext());
             setViews();
         }
     }

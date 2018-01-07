@@ -1,6 +1,10 @@
 package io.github.daddytrap.adream.fragment;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteCursorDriver;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQuery;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -16,6 +20,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.daddytrap.adream.ADApplication;
+import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
 import io.github.daddytrap.adream.adapter.CommonAdapter;
 import io.github.daddytrap.adream.model.Passage;
@@ -32,6 +37,8 @@ public class MiaobiFragment extends ADFragment {
     private CommonAdapter<Passage> miaobiAdapter = null;
     private static ADApplication application = ADApplication.getInstance();
     private ImageView miaobiNewIcon;
+
+    private ADSQLiteOpenHelper helper;
 
 
     public static MiaobiFragment newInstance() {
@@ -58,8 +65,11 @@ public class MiaobiFragment extends ADFragment {
     public void onViewCreated(View view, @NonNull Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        helper = new ADSQLiteOpenHelper(getContext(), null);
         miaobiList = (RecyclerView) fragView.findViewById(R.id.recycler);
         // TODO : 获取数据
+        miaobiData = helper.getPassageByType("miaobi");
+        System.out.println("Size:" + miaobiData.size());
 
         miaobiAdapter = new CommonAdapter<Passage>(getContext(), R.layout.miaobi_item, miaobiData) {
             @Override
