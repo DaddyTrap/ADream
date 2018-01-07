@@ -171,7 +171,7 @@ public class MusicActivity extends AppCompatActivity {
     }
 
     Music getRecommendMusic() {
-        ADSQLiteOpenHelper helper = new ADSQLiteOpenHelper(this);
+        ADSQLiteOpenHelper helper = new ADSQLiteOpenHelper(this, null);
         Date date = Calendar.getInstance().getTime();
         Music music = helper.getMusicByDate(date);
 
