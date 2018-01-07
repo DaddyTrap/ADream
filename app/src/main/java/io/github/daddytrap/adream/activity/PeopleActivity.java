@@ -2,6 +2,8 @@ package io.github.daddytrap.adream.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import io.github.daddytrap.adream.ADApplication;
@@ -12,6 +14,7 @@ public class PeopleActivity extends AppCompatActivity {
     private ADApplication app = ADApplication.getInstance();
 
     private TextView design, zhang, develop, lu, chen, liu;
+    private ImageView backIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,5 +34,13 @@ public class PeopleActivity extends AppCompatActivity {
         lu.setTypeface(app.KAI_TI_FONT);
         chen.setTypeface(app.KAI_TI_FONT);
         liu.setTypeface(app.KAI_TI_FONT);
+
+        backIcon = (ImageView) findViewById(R.id.activity_people_back_icon);
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PeopleActivity.this.finish();
+            }
+        });
     }
 }

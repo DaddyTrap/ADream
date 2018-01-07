@@ -13,7 +13,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:crop="centerTop"
+        app:crop="centerBottom"
         android:src="@mipmap/startup_background"/>
 
     <TextView

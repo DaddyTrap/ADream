@@ -64,6 +64,7 @@ public class MusicService extends Service {
                         break;
                     }
                     try {
+                        currentState = MusicState.Setting;
                         Log.i(MusicService.class.getName(), "Trying to read " + sourceUrl);
                         mediaPlayer.stop();
                         mediaPlayer.reset();
