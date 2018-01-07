@@ -6,24 +6,30 @@ package io.github.daddytrap.adream.model;
 
 public class Music {
     private int id;
-    private String localPath;
     private String href;
+    private String title;
+    private String lyric;
 
-    public Music(int id, String localPath, String href) {
+    public Music(int id, String href, String title, String lyric) {
         this.id = id;
-        this.localPath = localPath;
         this.href = href;
+        this.title = title;
+        this.lyric = lyric;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getLocalPath() {
-        return localPath;
-    }
-
     public String getHref() {
         return href;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getLyric() {
+        return lyric;
     }
 }

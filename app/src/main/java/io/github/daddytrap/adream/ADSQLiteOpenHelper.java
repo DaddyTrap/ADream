@@ -4,7 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +22,7 @@ import io.github.daddytrap.adream.model.User;
  */
 
 public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "Contacts.db";
+    private static final String DB_NAME = "ADream.db";
     private static final String USER_TABLE_NAME = "User";
     private static final String PASSAGE_TABLE_NAME = "Passage";
     private static final String PRAISE_TABLE_NAME = "Praise";
@@ -28,8 +31,16 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String RECOMMEND_TABLE_NAME = "Recommend";
     private static final int DB_VERSION = 1;
 
+    private DateFormat dateFormat;
+
     public ADSQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    }
+
+    public ADSQLiteOpenHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     }
 
     @Override
@@ -70,8 +81,9 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
 
         String createMusicTableSql = "CREATE TABLE " + MUSIC_TABLE_NAME +
                 "(id integer primary key," +
-                "localpath text," +
-                "href text);";
+                "href text," +
+                "title text," +
+                "lyric text);";
         db.execSQL(createMusicTableSql);
 
         String createRecommendTableSql = "CREATE TABLE " + RECOMMEND_TABLE_NAME +
@@ -117,8 +129,10 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public void insertRecommend(Date date, int musicId) {
         SQLiteDatabase db = getWritableDatabase();
+        // Get date without time
+        String dateStr = dateFormat.format(date);
         String insertRecommendSql = "INSERT INTO " + RECOMMEND_TABLE_NAME +
-                " VALUES (" + musicId + ", " + String.valueOf(date) + ");";
+                " VALUES (" + musicId + ", " + dateStr + ");";
         db.execSQL(insertRecommendSql);
     }
 
@@ -177,15 +191,34 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public Music getMusicByDate(Date date) {
         SQLiteDatabase db = getReadableDatabase();
-        String querySql = "SELECT Music.id, Music.localpath, Music.href FROM " + MUSIC_TABLE_NAME + ", " + RECOMMEND_TABLE_NAME + " WHERE date = ? AND Recommend.musicid = Music.id;";
-        Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(date)});
+        // Get date without time
+        String dateStr = dateFormat.format(date);
+        String querySql = "SELECT * FROM " + MUSIC_TABLE_NAME + ", " + RECOMMEND_TABLE_NAME + " WHERE date = ? AND Recommend.musicid = Music.id;";
+        Cursor cursor = db.rawQuery(querySql, new String[] {dateStr});
         if (cursor.moveToFirst()) {
-            Music music = new Music(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("localpath")), cursor.getString(cursor.getColumnIndex("href")));
+            Music music = new Music(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("href")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("lyric")));
             cursor.close();
             return music;
         } else {
             return null;
         }
+    }
+
+    public List<Music> getMusics() {
+        SQLiteDatabase db = getReadableDatabase();
+        String querySql = "SELECT * FROM " + MUSIC_TABLE_NAME;
+        Cursor cursor = db.rawQuery(querySql, null);
+        List<Music> ret = new LinkedList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                ret.add(new Music(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("href")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("lyric"))));
+            } while (cursor.moveToNext());
+        } else {
+            cursor.close();
+            return null;
+        }
+        cursor.close();
+        return ret;
     }
 
     public List<Passage> getPraisedPassageByUserId(int userId) {
