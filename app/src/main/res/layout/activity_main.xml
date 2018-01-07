@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
+<android.support.v4.widget.DrawerLayout xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -148,8 +148,8 @@
         android:layout_height="match_parent">
 
         <com.cesards.cropimageview.CropImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -172,6 +172,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/drawer_user_name"
+            android:textColor="#000"
             android:layout_marginTop="5dp"
             style="@style/DrawerUser"
             app:layout_constraintTop_toBottomOf="@+id/user_image"
@@ -180,27 +181,30 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/drawer_shi"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@mipmap/drawer_shi"
+            android:layout_width="@dimen/zan_size"
+            android:layout_height="@dimen/zan_size"
+            android:src="@mipmap/shi_icon"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/drawer_user_name"/>
+            app:layout_constraintTop_toBottomOf="@+id/drawer_user_name"
+            android:layout_marginTop="50dp"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/drawer_zan"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@mipmap/drawer_zan"
+            android:layout_width="@dimen/zan_size"
+            android:layout_height="@dimen/zan_size"
+            android:src="@mipmap/zan_icon"
+            android:layout_marginTop="50dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/drawer_shi"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/drawer_ren"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@mipmap/drawer_ren"
+            android:layout_width="@dimen/zan_size"
+            android:layout_height="@dimen/zan_size"
+            android:src="@mipmap/ren_icon"
+            android:layout_marginTop="50dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/drawer_zan"/>
