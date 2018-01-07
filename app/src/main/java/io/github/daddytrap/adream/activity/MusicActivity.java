@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -131,7 +132,10 @@ public class MusicActivity extends AppCompatActivity {
                     public void run() {
                         super.run();
                         Music music = getRecommendMusic();
-                        setSound(music, MusicService.SET_SOFT);
+                        if (music != null)
+                            setSound(music, MusicService.SET_SOFT);
+                        else
+                            Toast.makeText(MusicActivity.this, "找不到推荐音乐", Toast.LENGTH_SHORT).show();
                     }
                 };
                 thread.start();
@@ -179,7 +183,7 @@ public class MusicActivity extends AppCompatActivity {
             // If there is no music, generate one
             List<Music> musicList = helper.getMusics();
 
-            if (musicList.isEmpty()) return null;
+            if (musicList == null || musicList.isEmpty()) return null;
 
             int rand = new Random().nextInt() % musicList.size();
             music = musicList.get(rand);
