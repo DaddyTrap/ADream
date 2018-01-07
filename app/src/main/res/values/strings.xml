@@ -11,5 +11,16 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="drawer_user_name">夏目贵志</string>
+
+    <string name="people_design">设计</string>
+    <string name="people_zhang">张凌赟</string>
+    <string name="people_develop">开发</string>
+    <string name="people_lu">卢家熙</string>
+    <string name="people_chen">陈序</string>
+    <string name="people_liu">刘俊良</string>
+
+    <string name="calendar_request_error">网络请求老黄历失败</string>
+    <string name="calendar_empty">\　\　</string>
 </resources>

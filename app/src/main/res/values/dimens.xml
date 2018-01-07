@@ -13,7 +13,8 @@
     <dimen name="medium_font_size">22sp</dimen>
     <dimen name="small_font_size">18sp</dimen>
     <dimen name="mini_font_size">14sp</dimen>
-    
+
     <dimen name="item_shici_two_item_margn">30dp</dimen>
     <dimen name="zan_size">48dp</dimen>
+    <dimen name="calendar_internal_padding">30dp</dimen>
 </resources>

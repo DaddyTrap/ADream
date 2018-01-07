@@ -31,9 +31,11 @@
 
         <service android:name=".service.MusicService" />
 
+        <activity android:name=".activity.CalendarActivity" />
         <activity android:name=".activity.EditMiaobiActivity" />
         <activity android:name=".activity.ShiciDetailActivity" />
-        <activity android:name=".activity.JiuwuDetailActivity"></activity>
+        <activity android:name=".activity.JiuwuDetailActivity"/>
+        <activity android:name=".activity.PeopleActivity"/>
     </application>
 
 </manifest>
