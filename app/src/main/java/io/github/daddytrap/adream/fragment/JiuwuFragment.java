@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import io.github.daddytrap.adream.ADApplication;
+import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
 import io.github.daddytrap.adream.activity.JiuwuDetailActivity;
 import io.github.daddytrap.adream.adapter.CommonAdapter;
@@ -56,14 +57,17 @@ public class JiuwuFragment extends ADFragment {
 
     private ADApplication app;
 
+    private ADSQLiteOpenHelper sqlHelper;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         app = ADApplication.getInstance();
 
-        jiuwus = new LinkedList<>();
-        jiuwus.add(new Passage(1, "测试", "测试", "测试", new Date(), ""));
+        sqlHelper = new ADSQLiteOpenHelper(this.getActivity());
+
+        jiuwus = sqlHelper.getPassageByType("jiuwu");
 
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_jiuwu_recyclerview);
         adapter = new CommonAdapter<Passage>(this.getActivity(), R.layout.recyclerview_item_jiuwu, jiuwus) {
@@ -89,9 +93,9 @@ public class JiuwuFragment extends ADFragment {
         adapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                // TODO: 真正获取数据
                 Passage jiuwu = jiuwus.get(position);
                 Intent intent = new Intent(JiuwuFragment.this.getActivity(), JiuwuDetailActivity.class);
+                intent.putExtra("passage_id", jiuwu.getPassageId());
                 startActivity(intent);
             }
 

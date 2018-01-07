@@ -38,6 +38,11 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     }
 
+    public ADSQLiteOpenHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -62,7 +67,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     public void insertPraise(int userId, int passageId) {
         SQLiteDatabase db =getWritableDatabase();
         String insertPraiseSql = "INSERT INTO " + PRAISE_TABLE_NAME +
-                " VALUES (" + userId +
+                " (userid, passageid) VALUES (" + userId +
                 ", " + passageId + ");";
         db.execSQL(insertPraiseSql);
     }
@@ -120,7 +125,12 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(querySql, null);
         try {
             while (cursor.moveToNext()) {
-                Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), dateFormat.parse(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                Passage passage;
+                if (type.equals("miaobi")) {
+                    passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), dateFormat.parse(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                } else {
+                    passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                }
                 result.add(passage);
             }
             cursor.close();
@@ -137,7 +147,12 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         Passage passage = null;
         if (cursor.moveToFirst()) {
             try {
-                passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), dateFormat.parse(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                String type = cursor.getString(cursor.getColumnIndex("type"));
+                if (type.equals("miaobi")) {
+                    passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), dateFormat.parse(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                } else {
+                    passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

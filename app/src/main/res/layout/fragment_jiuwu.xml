@@ -12,16 +12,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@mipmap/shici_background"
+        android:src="@mipmap/jiuwu_background"
         app:crop="centerTop"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/fragment_jiuwu_recyclerview"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="@dimen/toolbar_height"/>
 
 </android.support.constraint.ConstraintLayout>

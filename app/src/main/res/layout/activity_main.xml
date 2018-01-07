@@ -193,7 +193,7 @@
             android:id="@+id/drawer_zan"
             android:layout_width="@dimen/zan_size"
             android:layout_height="@dimen/zan_size"
-            android:src="@mipmap/zan_icon"
+            android:src="@mipmap/drawer_zan"
             android:layout_marginTop="50dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

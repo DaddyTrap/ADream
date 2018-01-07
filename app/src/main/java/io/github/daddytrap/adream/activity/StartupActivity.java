@@ -115,6 +115,7 @@ public class StartupActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissionsToRequestArr, PERMISSION_REQ_CODE);
         } else {
             setViews();
+            manager.openDatabase(getBaseContext());
         }
     }
 
