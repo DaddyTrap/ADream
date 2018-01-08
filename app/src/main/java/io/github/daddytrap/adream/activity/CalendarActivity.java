@@ -18,10 +18,13 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.github.daddytrap.adream.ADApplication;
+import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
+import io.github.daddytrap.adream.model.Qian;
 import io.github.daddytrap.adream.util.ADUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,10 +43,15 @@ public class CalendarActivity extends AppCompatActivity {
     private ImageView mBack;
     final private static String URL_TMPELATE = "http://www.laohuangli.net/wannianli/%d/%d-%d-%d.html";
 
+    private ADSQLiteOpenHelper helper;
+    private ADApplication app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+        helper = new ADSQLiteOpenHelper(this);
+        app = ADApplication.getInstance();
         findView();
         setView();
     }
@@ -98,7 +106,18 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
         mQian.setTypeface(app.KAI_TI_FONT);
-//        mQian.setText(queryQian());
+        Qian qian = queryQian();
+        if (qian == null) {
+            mQian.setText("今天还未摇签，可重启应用看看");
+        } else {
+            String title = qian.getTitle();
+            String content = qian.getContent();
+            String wholeQian = "";
+            wholeQian += "[" + title + "]\n";
+            content = content.replace("\n", "");
+            wholeQian += content.replaceAll("。|，", "\n");
+            mQian.setText(wholeQian.trim());
+        }
     }
 
     private void requestHuangli(String url) {
@@ -109,6 +128,7 @@ public class CalendarActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                handelError();
                 e.printStackTrace();
             }
 
@@ -180,7 +200,8 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
-    private String queryQian() {
-        return "您今天还未摇签";
+    private Qian queryQian() {
+        Date date = Calendar.getInstance().getTime();
+        return helper.getQianByUserIdAndDate(app.currentUserId, date);
     }
 }

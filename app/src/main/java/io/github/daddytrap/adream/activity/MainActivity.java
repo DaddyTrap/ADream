@@ -417,6 +417,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         toolbarWuImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("click");
                 drawer.openDrawer(drawerLayout);
             }
         });

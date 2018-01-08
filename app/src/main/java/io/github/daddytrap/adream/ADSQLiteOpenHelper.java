@@ -100,9 +100,9 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         String insertCommentSql = "INSERT INTO " + COMMENT_TABLE_NAME +
                 "(content, date, passageid, userid)" +
-                " VALUES (" + comment.getContent() +
-                ", " + String.valueOf(comment.getDate()) +
-                ", " + passageId +
+                " VALUES (\"" + comment.getContent() +
+                "\", \"" + dateFormat.format(comment.getDate()) +
+                "\", " + passageId +
                 ", " + comment.getUser().getId() + ");";
         db.execSQL(insertCommentSql);
     }

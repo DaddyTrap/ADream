@@ -36,6 +36,7 @@
         <activity android:name=".activity.ShiciDetailActivity" />
         <activity android:name=".activity.JiuwuDetailActivity" />
         <activity android:name=".activity.PeopleActivity" />
+        <activity android:name=".activity.MiaobiDetailActivity"></activity>
         <activity android:name=".activity.ZanActivity"></activity>
     </application>
 
