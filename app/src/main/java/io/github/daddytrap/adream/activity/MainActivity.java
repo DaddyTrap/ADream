@@ -417,12 +417,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         toolbarWuImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("click");
                 drawer.openDrawer(drawerLayout);
             }
         });
 
         userName.setTypeface(app.KAI_TI_FONT);
+
+        shi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        zan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ZanActivity.class);
+                startActivity(intent);
+            }
+        });
 
         ren.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -83,4 +83,9 @@
         <item name="android:textColor">#939292</item>
     </style>
 
+    <style name="ZanItem">
+        <item name="android:background">#F0FFFF</item>
+        <item name="android:alpha">0.4</item>
+    </style>
+
 </resources>

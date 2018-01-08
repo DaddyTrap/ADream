@@ -18,6 +18,8 @@
     <string name="people_chen">陈序</string>
     <string name="people_liu">刘俊良</string>
 
+    <string name="wu_zan">吾·赞</string>
+
     <string name="calendar_request_error">网络请求老黄历失败</string>
     <string name="calendar_empty">\　\　</string>
     <string name="nothing_found">似乎没有这个项目</string>

@@ -137,8 +137,8 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
     public List<Passage> getPassageByType(String type) {
         List<Passage> result = new LinkedList<>();
         SQLiteDatabase db = getReadableDatabase();
-        String querySql = "SELECT * FROM " + PASSAGE_TABLE_NAME + " WHERE type = \"" + type+ "\";";
-        Cursor cursor = db.rawQuery(querySql, null);
+        String querySql = "SELECT * FROM " + PASSAGE_TABLE_NAME + " WHERE type = ?;";
+        Cursor cursor = db.rawQuery(querySql, new String[] {type});
         try {
             if (cursor.moveToFirst()) {
                 do {
@@ -179,6 +179,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
             cursor.close();
             return passage;
         } else {
+            cursor.close();
             return null;
         }
     }
@@ -228,14 +229,20 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         return ret;
     }
 
-    public List<Passage> getPraisedPassageByUserId(int userId) {
+    public List<Passage> getPraisedPassagesByUserId(int userId) {
         List<Passage> result = new LinkedList<>();
         SQLiteDatabase db = getReadableDatabase();
-        String querySql = "SELECT Passage.id, Passage.title, Passage.author, Passage.content, Passage.date, Passage.avatarBase64 FROM " + PASSAGE_TABLE_NAME + ", " + PRAISE_TABLE_NAME + " WHERE Praise.userid = ?;";
+        String querySql = "SELECT Passage.id, Passage.title, Passage.author, Passage.content, Passage.date, Passage.avatarBase64, Passage.type FROM " + PASSAGE_TABLE_NAME + ", " + PRAISE_TABLE_NAME + " WHERE Praise.userid = ? AND Praise.passageid = Passage.id;";
         Cursor cursor = db.rawQuery(querySql, new String[] {String.valueOf(userId)});
+        Passage passage;
         try {
             while (cursor.moveToNext()) {
-                Passage passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), dateFormat.parse(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                String type = cursor.getString(cursor.getColumnIndex("type"));
+                if (type.equals("miaobi")) {
+                    passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), dateFormat.parse(cursor.getString(cursor.getColumnIndex("date"))), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                } else {
+                    passage = new Passage(cursor.getInt(cursor.getColumnIndex("id")), cursor.getString(cursor.getColumnIndex("title")), cursor.getString(cursor.getColumnIndex("author")), cursor.getString(cursor.getColumnIndex("content")), new Date(), cursor.getString(cursor.getColumnIndex("avatarBase64")));
+                }
                 result.add(passage);
             }
         } catch (Exception e) {
