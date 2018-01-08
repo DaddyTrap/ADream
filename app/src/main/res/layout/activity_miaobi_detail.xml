@@ -85,6 +85,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@android:color/white"
+                android:textSize="@dimen/small_font_size"
+                android:drawableStart="@drawable/ic_comment"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:drawablePadding="10dp"
+                android:imeOptions="actionSend"
+                android:maxLines="1"
                 android:hint="@string/comment_hint"/>
         </LinearLayout>
     </ScrollView>

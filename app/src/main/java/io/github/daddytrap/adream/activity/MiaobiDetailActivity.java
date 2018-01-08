@@ -1,19 +1,24 @@
 package io.github.daddytrap.adream.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cesards.cropimageview.CropImageView;
+import com.xhinliang.lunarcalendar.utils.TextUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -111,6 +116,24 @@ public class MiaobiDetailActivity extends AppCompatActivity {
                 mZan.setImageResource(zanned ? R.mipmap.zanned_icon : R.mipmap.zan_icon);
             }
         });
+        mEditComment.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_ENTER&& event.getAction() == KeyEvent.ACTION_DOWN) {
+
+                    InputMethodManager imm = (InputMethodManager) v.getContext()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                    MiaobiDetailActivity.this.addComment(mEditComment.getText().toString());
+                    if(imm.isActive()) {
+                        imm.hideSoftInputFromWindow(v.getApplicationWindowToken(),0);
+
+                    }
+
+                }
+                return false;
+            }
+        });
     }
 
     void appendComment(Comment comment) {
@@ -128,5 +151,13 @@ public class MiaobiDetailActivity extends AppCompatActivity {
         content.setText(comment.getContent());
         content.setTypeface(app.SIM_KAI_FONT);
         mCommentList.addView(commentView);
+    }
+
+    void addComment(String content) {
+        if (TextUtils.isEmpty(content)) return;
+        User user = helper.getUserById(app.currentUserId);
+        Comment comment = new Comment(-1, user, content, new Date());
+        helper.insertComment(comment, passageId);
+        appendComment(comment);
     }
 }
