@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onPause();
     }
 
-    private static final float MIN_SHAKE_ACC = 20f;
+    private static final float MIN_SHAKE_ACC = 17f;
     private boolean shaking = false;
 
     @Override
