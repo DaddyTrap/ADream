@@ -209,7 +209,9 @@
                 android:src="@mipmap/qian_one"
                 android:layout_gravity="center"
                 android:layout_marginRight="25dp"
-                android:layout_marginLeft="25dp"/>
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"/>
             <TextView
                 android:id="@+id/qian_text"
                 android:layout_width="match_parent"

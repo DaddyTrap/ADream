@@ -113,7 +113,7 @@ public class CalendarActivity extends AppCompatActivity {
             String title = qian.getTitle();
             String content = qian.getContent();
             String wholeQian = "";
-            wholeQian += "[" + title + "]\n\n";
+            wholeQian += "[" + title + "]\n";
             content = content.replace("\n", "");
             wholeQian += content.replaceAll("。|，", "\n");
             mQian.setText(wholeQian.trim());

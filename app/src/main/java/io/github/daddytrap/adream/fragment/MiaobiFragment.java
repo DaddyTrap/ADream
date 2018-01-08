@@ -82,6 +82,8 @@ public class MiaobiFragment extends ADFragment {
             @Override
             public void convert(ViewHolder holder, Passage object) {
                 CircleImageView image = holder.getView(R.id.image);
+                image.setMinimumWidth(image.getMeasuredWidth());
+                image.setMaxHeight(image.getMeasuredWidth());
                 image.setImageBitmap(application.getBitmap(object.getAvatarBase64()));
                 TextView title = holder.getView(R.id.title);
                 title.setText(object.getTitle());
