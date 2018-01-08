@@ -1,10 +1,6 @@
 package io.github.daddytrap.adream.fragment;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteCursorDriver;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQuery;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -78,7 +74,7 @@ public class MiaobiFragment extends ADFragment {
         miaobiList = (RecyclerView) fragView.findViewById(R.id.recycler);
         miaobiData = helper.getPassageByType("miaobi");
 
-        miaobiAdapter = new CommonAdapter<Passage>(getContext(), R.layout.miaobi_item, miaobiData) {
+        miaobiAdapter = new CommonAdapter<Passage>(getContext(), R.layout.recycler_item_miaobi, miaobiData) {
             @Override
             public void convert(ViewHolder holder, Passage object) {
                 CircleImageView image = holder.getView(R.id.image);

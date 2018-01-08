@@ -432,6 +432,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+        zan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ZanActivity.class);
+                startActivity(intent);
+            }
+        });
+
         ren.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
