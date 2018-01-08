@@ -424,6 +424,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         userName.setTypeface(app.KAI_TI_FONT);
 
+        shi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+                startActivity(intent);
+            }
+        });
+
         ren.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
