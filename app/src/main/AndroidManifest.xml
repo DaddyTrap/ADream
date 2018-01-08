@@ -34,8 +34,9 @@
         <activity android:name=".activity.CalendarActivity" />
         <activity android:name=".activity.EditMiaobiActivity" />
         <activity android:name=".activity.ShiciDetailActivity" />
-        <activity android:name=".activity.JiuwuDetailActivity"/>
-        <activity android:name=".activity.PeopleActivity"/>
+        <activity android:name=".activity.JiuwuDetailActivity" />
+        <activity android:name=".activity.PeopleActivity" />
+        <activity android:name=".activity.MiaobiDetailActivity"></activity>
     </application>
 
 </manifest>
