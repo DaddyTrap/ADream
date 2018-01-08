@@ -21,4 +21,5 @@
     <string name="calendar_request_error">网络请求老黄历失败</string>
     <string name="calendar_empty">\　\　</string>
     <string name="nothing_found">似乎没有这个项目</string>
+    <string name="comment_hint">撰写我的评论</string>
 </resources>

@@ -24,6 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.daddytrap.adream.ADApplication;
 import io.github.daddytrap.adream.ADSQLiteOpenHelper;
 import io.github.daddytrap.adream.R;
+import io.github.daddytrap.adream.activity.MiaobiDetailActivity;
 import io.github.daddytrap.adream.adapter.CommonAdapter;
 import io.github.daddytrap.adream.model.Passage;
 import io.github.daddytrap.adream.viewholder.ViewHolder;
@@ -102,9 +103,9 @@ public class MiaobiFragment extends ADFragment {
             @Override
             public void onClick(int position) {
                 // TODO : 填写Activity
-//                Intent intent = new Intent();
-//                intent.putExtra("id", miaobiData.get(position).getPassageId());
-//                startActivity(intent);
+                Intent intent = new Intent(MiaobiFragment.this.getActivity(), MiaobiDetailActivity.class);
+                intent.putExtra("id", miaobiData.get(position).getPassageId());
+                startActivity(intent);
             }
 
             @Override
