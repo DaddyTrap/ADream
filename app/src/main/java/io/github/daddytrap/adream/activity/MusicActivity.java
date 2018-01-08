@@ -46,6 +46,7 @@ public class MusicActivity extends AppCompatActivity {
     private TextView maxTimeText;
     private ImageView backIcon;
     private ImageView background;
+    private ImageView downloadIcon;
 
     private Handler handler;
     public static final int REFRESH_REQ = 110;
@@ -55,6 +56,8 @@ public class MusicActivity extends AppCompatActivity {
 
     private Thread updateThread;
     private boolean threadRunning = true;
+
+    private Music currentMusic;
 
     private ADApplication app;
 
@@ -80,6 +83,7 @@ public class MusicActivity extends AppCompatActivity {
                         Parcel data = Parcel.obtain();
                         Parcel reply = Parcel.obtain();
                         try {
+                            if (mBinder == null) return;
                             mBinder.transact(MusicService.REFRESH_REQ, data, reply, 0);
                         } catch (RemoteException e) {
                             e.printStackTrace();
@@ -236,6 +240,7 @@ public class MusicActivity extends AppCompatActivity {
         maxTimeText = (TextView)findViewById(R.id.activity_music_max_time);
 
         background = (ImageView)findViewById(R.id.activity_music_background);
+        downloadIcon = (ImageView)findViewById(R.id.activity_music_download);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -291,6 +296,21 @@ public class MusicActivity extends AppCompatActivity {
                 setSound(getRecommendMusic(), MusicService.SET_HARD);
             }
         });
+
+        downloadIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Parcel data = Parcel.obtain();
+                Parcel reply = Parcel.obtain();
+                try {
+                    data.writeStringArray(new String[] {currentMusic.getHref(), currentMusic.getTitle()});
+                    mBinder.transact(MusicService.DOWNLOAD_REQ, data, reply, 0);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    Toast.makeText(MusicActivity.this, "下载调用失败！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     void setSound(final Music music, String mode) {
@@ -309,6 +329,8 @@ public class MusicActivity extends AppCompatActivity {
                 maxTimeText.setText("稍安勿躁");
             }
         });
+
+        currentMusic = music;
 
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();

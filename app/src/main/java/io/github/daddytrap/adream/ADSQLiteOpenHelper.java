@@ -62,7 +62,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         String insertMiaoBiSql = "INSERT INTO " + PASSAGE_TABLE_NAME +
                 " (title, author, content, date, type, avatarBase64)" +
                 " VALUES (\"" + passage.getTitle() +
-                "\", \"" + passage.getAuthor() +
+                "\", \"文/" + passage.getAuthor() +
                 "\", \"" + passage.getContent() +
                 "\", \"" + dateFormat.format(passage.getDate()) +
                 "\", \"miaobi\"" +

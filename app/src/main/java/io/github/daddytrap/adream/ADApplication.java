@@ -25,7 +25,7 @@ public class ADApplication extends Application {
 
     private Map<String, Bitmap> bitmapCache = null;
 
-    public int currentUserId = 3;
+    public int currentUserId = 7;
 
     @Override
     public void onCreate() {
