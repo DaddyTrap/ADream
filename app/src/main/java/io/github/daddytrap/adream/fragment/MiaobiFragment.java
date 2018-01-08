@@ -98,9 +98,8 @@ public class MiaobiFragment extends ADFragment {
         miaobiAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                // TODO : 填写Activity
                 Intent intent = new Intent(MiaobiFragment.this.getActivity(), MiaobiDetailActivity.class);
-                intent.putExtra("id", miaobiData.get(position).getPassageId());
+                intent.putExtra("passage_id", miaobiData.get(position).getPassageId());
                 startActivity(intent);
             }
 

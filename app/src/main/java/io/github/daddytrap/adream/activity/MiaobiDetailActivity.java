@@ -48,7 +48,7 @@ public class MiaobiDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_miaobi_detail);
         Intent intent = getIntent();
         Intent dataIntent = getIntent();
-        passageId = dataIntent.getIntExtra("id", -1);
+        passageId = dataIntent.getIntExtra("passage_id", -1);
         helper = new ADSQLiteOpenHelper(this);
         passage = helper.getPassageById(passageId);
 

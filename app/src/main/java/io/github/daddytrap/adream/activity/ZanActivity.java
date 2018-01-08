@@ -1,5 +1,6 @@
 package io.github.daddytrap.adream.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -76,6 +77,30 @@ public class ZanActivity extends AppCompatActivity {
                 }
             }
         };
+
+        zanAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Passage passage = zanData.get(position);
+                Intent intent;
+                String type = passage.getType();
+                if (type.equals("shici")) {
+                    intent = new Intent(ZanActivity.this, ShiciDetailActivity.class);
+                } else if (type.equals("jiuwu")) {
+                    intent = new Intent(ZanActivity.this, JiuwuDetailActivity.class);
+                } else if (type.equals("miaobi")) {
+                    intent = new Intent(ZanActivity.this, MiaobiDetailActivity.class);
+                } else {
+                    return;
+                }
+
+                intent.putExtra("passage_id", passage.getPassageId());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(int position) {}
+        });
 
         zanList.setAdapter(zanAdapter);
 

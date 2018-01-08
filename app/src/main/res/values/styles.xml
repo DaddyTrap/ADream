@@ -84,8 +84,7 @@
     </style>
 
     <style name="ZanItem">
-        <item name="android:background">#F0FFFF</item>
-        <item name="android:alpha">0.4</item>
+        <item name="android:background">#c8c8c8c8</item>
     </style>
 
 </resources>

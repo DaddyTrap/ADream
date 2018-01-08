@@ -14,6 +14,7 @@ public class Passage {
     private String content;
     private Date date;
     private String avatarBase64;
+    private String type;
 
     public Passage(int passageId, String title, String author, String content, Date date, String avatarBase64) {
         this.passageId = passageId;
@@ -22,6 +23,17 @@ public class Passage {
         this.content = content;
         this.date = date;
         this.avatarBase64 = avatarBase64;
+        this.type = "unknown";
+    }
+
+    public Passage(int passageId, String title, String author, String content, Date date, String avatarBase64, String type) {
+        this.passageId = passageId;
+        this.title = title;
+        this.author = author;
+        this.content = content;
+        this.date = date;
+        this.avatarBase64 = avatarBase64;
+        this.type = type;
     }
 
     public int getPassageId() {
@@ -46,5 +58,9 @@ public class Passage {
 
     public String getAvatarBase64() {
         return avatarBase64;
+    }
+
+    public String getType() {
+        return type;
     }
 }

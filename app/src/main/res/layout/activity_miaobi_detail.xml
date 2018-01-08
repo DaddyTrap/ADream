@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context="io.github.daddytrap.adream.activity.MiaobiDetailActivity">
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -41,6 +41,8 @@
                 android:id="@+id/miaobi_detail_passage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:textSize="@dimen/medium_font_size"
                 android:layout_margin="15dp"/>
             <TextView
