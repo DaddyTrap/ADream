@@ -11,6 +11,7 @@ import android.os.Message;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -195,6 +196,12 @@ public class MusicActivity extends AppCompatActivity {
     Music getRecommendMusic() {
         Date date = Calendar.getInstance().getTime();
         Music music = helper.getMusicByDate(date);
+
+        if (music != null) {
+            Log.i(MusicActivity.class.getName(), "推荐" + music.getTitle());
+        } else {
+            Log.i(MusicActivity.class.getName(), "找不到推荐");
+        }
 
         if (music == null) {
             // If there is no music, generate one

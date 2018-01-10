@@ -112,7 +112,7 @@ public class ADSQLiteOpenHelper extends SQLiteOpenHelper {
         // Get date without time
         String dateStr = dateFormat.format(date);
         String insertRecommendSql = "INSERT INTO " + RECOMMEND_TABLE_NAME +
-                " (musicid, date) VALUES (" + musicId + ", " + dateStr + ");";
+                " (musicid, date) VALUES (" + musicId + ", \"" + dateStr + "\");";
         db.execSQL(insertRecommendSql);
     }
 
